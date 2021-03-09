@@ -680,7 +680,7 @@ def find_convective_pixels(reflectivity_matrix_dbz, grid_metadata_dict,
     grid_metadata_dict[LONGITUDES_KEY] = grid_point_longitudes_deg
     reflectivity_matrix_dbz[numpy.isnan(reflectivity_matrix_dbz)] = 0.
 
-    print('Applying criterion 1 for convective classification...')
+#     print('Applying criterion 1 for convective classification...')
     convective_flag_matrix = _apply_convective_criterion1(
         reflectivity_matrix_dbz=reflectivity_matrix_dbz,
         peakedness_neigh_metres=peakedness_neigh_metres,
@@ -691,11 +691,11 @@ def find_convective_pixels(reflectivity_matrix_dbz, grid_metadata_dict,
         grid_metadata_dict=grid_metadata_dict
     )
 
-    print('Number of convective pixels = {0:d}'.format(
-        numpy.sum(convective_flag_matrix)
-    ))
+#     print('Number of convective pixels = {0:d}'.format(
+#         numpy.sum(convective_flag_matrix)
+#     ))
 
-    print('Applying criterion 2 for convective classification...')
+#     print('Applying criterion 2 for convective classification...')
     convective_flag_matrix = _apply_convective_criterion2(
         reflectivity_matrix_dbz=reflectivity_matrix_dbz,
         convective_flag_matrix=convective_flag_matrix,
@@ -705,9 +705,9 @@ def find_convective_pixels(reflectivity_matrix_dbz, grid_metadata_dict,
         min_composite_refl_aml_dbz
     )
 
-    print('Number of convective pixels = {0:d}'.format(
-        numpy.sum(convective_flag_matrix)
-    ))
+#     print('Number of convective pixels = {0:d}'.format(
+#         numpy.sum(convective_flag_matrix)
+#     ))
 
     print('Applying criterion 3 for convective classification...')
     convective_flag_matrix = _apply_convective_criterion3(
@@ -718,21 +718,21 @@ def find_convective_pixels(reflectivity_matrix_dbz, grid_metadata_dict,
         echo_top_level_dbz=echo_top_level_dbz
     )
 
-    print('Number of convective pixels = {0:d}'.format(
-        numpy.sum(convective_flag_matrix)
-    ))
+#     print('Number of convective pixels = {0:d}'.format(
+#         numpy.sum(convective_flag_matrix)
+#     ))
 
-    print('Applying criterion 4 for convective classification...')
+#     print('Applying criterion 4 for convective classification...')
     convective_flag_matrix = _apply_convective_criterion4(
         convective_flag_matrix=convective_flag_matrix,
         min_size_pixels=min_size_pixels
     )
 
-    print('Number of convective pixels = {0:d}'.format(
-        numpy.sum(convective_flag_matrix)
-    ))
+#     print('Number of convective pixels = {0:d}'.format(
+#         numpy.sum(convective_flag_matrix)
+#     ))
 
-    print('Applying criterion 5 for convective classification...')
+#     print('Applying criterion 5 for convective classification...')
     convective_flag_matrix = _apply_convective_criterion5(
         reflectivity_matrix_dbz=reflectivity_matrix_dbz,
         convective_flag_matrix=convective_flag_matrix,
