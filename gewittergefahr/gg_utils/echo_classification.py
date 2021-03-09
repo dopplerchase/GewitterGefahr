@@ -709,7 +709,7 @@ def find_convective_pixels(reflectivity_matrix_dbz, grid_metadata_dict,
 #         numpy.sum(convective_flag_matrix)
 #     ))
 
-    print('Applying criterion 3 for convective classification...')
+#     print('Applying criterion 3 for convective classification...')
     convective_flag_matrix = _apply_convective_criterion3(
         reflectivity_matrix_dbz=reflectivity_matrix_dbz,
         convective_flag_matrix=convective_flag_matrix,
