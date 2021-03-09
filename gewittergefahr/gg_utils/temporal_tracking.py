@@ -1759,14 +1759,14 @@ def check_tracking_periods(tracking_start_times_unix_sec,
             for t in tracking_end_times_unix_sec
         ]
 
-        print('\n')
-        for k in range(len(tracking_start_time_strings)):
-            print('{0:d}th tracking period = {1:s} to {2:s}'.format(
-                k + 1, tracking_start_time_strings[k],
-                tracking_end_time_strings[k]
-            ))
+#         print('\n')
+#         for k in range(len(tracking_start_time_strings)):
+#             print('{0:d}th tracking period = {1:s} to {2:s}'.format(
+#                 k + 1, tracking_start_time_strings[k],
+#                 tracking_end_time_strings[k]
+#             ))
 
-        print('\n')
+#         print('\n')
         raise ValueError(
             'As shown above, start/end times of tracking periods are not sorted'
             ' in the same order.'
