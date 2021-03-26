@@ -19,7 +19,10 @@ LONGITUDE_TOLERANCE_DEG = 0.01
 
 YEAR_FORMAT = '%Y'
 TIME_FORMAT_IN_FILE_NAMES = '%Y%m%dT%H%M%SZ'
-PATHLESS_FILE_NAME_PREFIX = 'nexrad_3d_4_1'
+#old gridrad file for Lagerquist 2020-2021 have this prefix
+# PATHLESS_FILE_NAME_PREFIX = 'nexrad_3d_4_1'
+#new files have this prefix: 
+PATHLESS_FILE_NAME_PREFIX = 'nexrad_3d_v4_2'
 FILE_EXTENSION = '.nc'
 
 KM_TO_METRES = 1000
