@@ -1376,7 +1376,7 @@ def run_tracking(
         last_spc_date_string, first_time_unix_sec=None, last_time_unix_sec=None,
         first_numeric_id=None,
         echo_top_field_name=radar_utils.ECHO_TOP_40DBZ_NAME,
-        radar_source_name=radar_utils.MYRORSS_SOURCE_ID,
+        radar_source_name=radar_utils.GRIDRAD_SOURCE_ID,
         top_echo_classifn_dir_name=None,
         min_echo_top_km=DEFAULT_MIN_ECHO_TOP_KM,
         smoothing_radius_deg_lat=DEFAULT_SMOOTHING_RADIUS_DEG_LAT,
