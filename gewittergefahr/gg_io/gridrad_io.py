@@ -218,7 +218,8 @@ def read_metadata_from_full_grid_file(
         netcdf_dataset.variables[LATITUDE_NAME_ORIG])
     grid_point_longitudes_deg = lng_conversion.convert_lng_positive_in_west(
         numpy.array(netcdf_dataset.variables[LONGITUDE_NAME_ORIG]))
-
+    #debug line of code 26/03/21 RJC
+    import pdb; pdb.set_trace()
     metadata_dict = {
         radar_utils.NW_GRID_POINT_LAT_COLUMN:
             numpy.max(grid_point_latitudes_deg),
