@@ -1541,7 +1541,7 @@ def local_maxima_to_storm_tracks(local_max_dict_by_time, first_numeric_id):
     all_centroid_longitudes_deg = numpy.array([])
     all_centroid_x_metres = numpy.array([])
     all_centroid_y_metres = numpy.array([])
-    import pdb; pdb.set_trace()
+    
     include_polygons = POLYGON_OBJECTS_LATLNG_KEY in local_max_dict_by_time[0]
 
     all_polygon_rows_arraylist = []
