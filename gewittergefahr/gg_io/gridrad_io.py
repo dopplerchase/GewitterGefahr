@@ -31,7 +31,10 @@ ZERO_TIME_UNIX_SEC = 978307200
 LATITUDE_NAME_ORIG = 'Latitude'
 LONGITUDE_NAME_ORIG = 'Longitude'
 HEIGHT_NAME_ORIG = 'Altitude'
-TIME_NAME_ORIG = 'time'
+#old gridrad file for Lagerquist 2020-2021 have this time key 
+# TIME_NAME_ORIG = 'time'
+#new files have this prefix: 
+TIME_NAME_ORIG = 'Analysis_time'
 
 
 def _time_from_gridrad_to_unix(gridrad_time_sec):
