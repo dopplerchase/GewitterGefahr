@@ -220,7 +220,7 @@ def download_grib_file(
         init_time_unix_sec=init_time_unix_sec, model_name=model_name,
         grid_id=grid_id, lead_time_hours=lead_time_hours,
         raise_error_if_missing=False)
-
+    import pdb; pdb.set_trace()
     for i in range(len(pathless_file_names)):
         for j in range(len(top_online_dir_names)):
             this_online_file_name = '{0:s}/{1:s}/{2:s}/{3:s}'.format(
