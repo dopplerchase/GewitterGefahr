@@ -325,8 +325,8 @@ def get_online_directories(model_name, grid_name=None):
     if model_name == RAP_MODEL_NAME:
         if grid_name == NAME_OF_130GRID:
             #updated urls (RJC 03/30/21)
-            return ['https://www.ncei.noaa.gov/thredds/fileServer/rap130anl-old']
-        return ['https://www.ncei.noaa.gov/thredds/fileServer/rap252anl-old']
+            return ['https://www.ncei.noaa.gov/thredds/fileServer/model-rap130anl-old']
+        return ['https://www.ncei.noaa.gov/thredds/fileServer/model-rap252anl-old']
 
     if model_name == RUC_MODEL_NAME:
         if grid_name == NAME_OF_130GRID:
