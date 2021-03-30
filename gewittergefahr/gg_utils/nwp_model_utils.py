@@ -324,9 +324,15 @@ def get_online_directories(model_name, grid_name=None):
 
     if model_name == RAP_MODEL_NAME:
         if grid_name == NAME_OF_130GRID:
-            return ['https://www.ncei.noaa.gov/thredds/fileServer/rap130anl']
-
-        return ['https://www.ncei.noaa.gov/thredds/fileServer/rap252anl']
+            #old thredds address
+#             return ['https://www.ncei.noaa.gov/thredds/fileServer/rap130anl']
+            #new thredds address (RJC, 03/30/21)
+            return ['https://www.ncei.noaa.gov/thredds/catalog/model-rap130anl-old']     
+        
+        #old thredds address
+#         return ['https://www.ncei.noaa.gov/thredds/fileServer/rap252anl']
+        #new thredds address (RJC, 03/30/21)
+        return ['https://www.ncei.noaa.gov/thredds/catalog/model-rap252anl-old']
 
     if model_name == RUC_MODEL_NAME:
         if grid_name == NAME_OF_130GRID:
