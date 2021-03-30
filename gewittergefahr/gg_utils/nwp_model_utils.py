@@ -330,9 +330,9 @@ def get_online_directories(model_name, grid_name=None):
 
     if model_name == RUC_MODEL_NAME:
         if grid_name == NAME_OF_130GRID:
-            return ['https://www.ncei.noaa.gov/thredds/fileServer/ruc130anl']
+            return ['https://www.ncei.noaa.gov/thredds/fileServer/model-ruc130anl']
         if grid_name == NAME_OF_252GRID:
-            return ['https://www.ncei.noaa.gov/thredds/fileServer/ruc252anl']
+            return ['https://www.ncei.noaa.gov/thredds/fileServer/model-ruc252anl']
 
     return None
 
