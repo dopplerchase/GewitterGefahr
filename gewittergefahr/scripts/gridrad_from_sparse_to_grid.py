@@ -32,18 +32,20 @@ def _sparse2grid(input_directory_name, output_directory_name):
     filelist = glob.glob(input_directory_name + '/*')
     filelist.sort() #sort them otherwise they will be out of order
     #loop over all files 
+    #check to see if path exists
+    from pathlib import Path
+    path_end = filelist[0][-49:-34]
+    Path(output_directory_name+path_end).mkdir(parents=True, exist_ok=True)
+    
     for i in tqdm(np.arange(0,len(filelist))):
          filename = filelist[i]
-         
          #the gridrad object will open the raw sparse netcdf
          gr = gridrad(filename=filename,filter=True,toxr=True)
-         print(gr)
          end_path = filename[-49:]
          beg_path =output_directory_name
          savename = beg_path + end_path 
-         print(savename)
          #save the gridded product 
-         gr.ds.to_netcdf(savename)
+         gr.ds.to_netcdf(savename,mode='w')
          gr.ds.close()
          del gr 
          gc.collect()
