@@ -23,6 +23,7 @@ dependencies:
   - scikit-image
   - shapely
   - basemap
+  - tqdm 
   - pip:
     - tensorflow
     - keras
