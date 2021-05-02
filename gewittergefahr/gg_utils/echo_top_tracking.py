@@ -1613,7 +1613,7 @@ def run_tracking(
 
     print('Converting time series of "{0:s}" maxima to storm tracks...'.format(
         echo_top_field_name))
-    import pdb; pdb.set_trace()
+    
     storm_object_table = temporal_tracking.local_maxima_to_storm_tracks(
         local_max_dict_by_time=local_max_dict_by_time,
         first_numeric_id=first_numeric_id)
