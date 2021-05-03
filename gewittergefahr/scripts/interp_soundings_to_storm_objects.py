@@ -154,7 +154,10 @@ def _run(spc_date_string, lead_times_seconds,
         wgrib2_exe_name = '/home/randychase/wgrib2/grib2/wgrib2'
 
         if elevation_dir_name is None:
-            elevation_dir_name = '/condo/swatwork/ralager/elevation'
+#             elevation_dir_name = '/condo/swatwork/ralager/elevation'
+            #same as changing the wgrib paths 
+            elevation_dir_name = '/home/randychase/.cache/srtm'
+
 
     lead_times_seconds = numpy.array(lead_times_seconds, dtype=int)
 
