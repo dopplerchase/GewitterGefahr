@@ -147,8 +147,11 @@ def _run(spc_date_string, lead_times_seconds,
         if elevation_dir_name is None:
             elevation_dir_name = '/glade/work/ryanlage/elevation'
     else:
-        wgrib_exe_name = '/condo/swatwork/ralager/wgrib/wgrib'
-        wgrib2_exe_name = '/condo/swatwork/ralager/grib2/wgrib2/wgrib2'
+#         wgrib_exe_name = '/condo/swatwork/ralager/wgrib/wgrib'
+#         wgrib2_exe_name = '/condo/swatwork/ralager/grib2/wgrib2/wgrib2'
+        #had to mannually change wgrib path to my path. (just in case if ryan's dir is deleted)
+        wgrib_exe_name = '/home/randychase/wgrib'
+        wgrib2_exe_name = '/home/randychase/wgrib2/grib2/wgrib2'
 
         if elevation_dir_name is None:
             elevation_dir_name = '/condo/swatwork/ralager/elevation'
