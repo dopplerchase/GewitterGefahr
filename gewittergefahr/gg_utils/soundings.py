@@ -1110,7 +1110,13 @@ def interp_soundings_to_storm_objects(
     }
 
     target_point_table.rename(columns=column_dict_old_to_new, inplace=True)
-
+    
+    print(SEPARATOR_STRING)
+    print('this is the targe_point_table')
+    print(target_point_table)
+    print(SEPARATOR_STRING)
+    
+    
     print(SEPARATOR_STRING)
     interp_table = _interp_soundings_from_nwp(
         target_point_table=target_point_table,
