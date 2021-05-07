@@ -1112,18 +1112,17 @@ def interp_soundings_to_storm_objects(
     target_point_table.rename(columns=column_dict_old_to_new, inplace=True)
     
     print(SEPARATOR_STRING)
-    print('this is the targe_point_table')
-    print(target_point_table)
-    print(SEPARATOR_STRING)
-    
-    
-    print(SEPARATOR_STRING)
     interp_table = _interp_soundings_from_nwp(
         target_point_table=target_point_table,
         top_grib_directory_name=top_grib_directory_name, include_surface=False,
         model_name=model_name, use_all_grids=use_all_grids, grid_id=grid_id,
         wgrib_exe_name=wgrib_exe_name, wgrib2_exe_name=wgrib2_exe_name,
         raise_error_if_missing=raise_error_if_missing)
+    print(SEPARATOR_STRING)
+    
+    print(SEPARATOR_STRING)
+    print('this is the interp_table')
+    print(interp_table)
     print(SEPARATOR_STRING)
 
     print('Converting interpolated values to soundings...')
