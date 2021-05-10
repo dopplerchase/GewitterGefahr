@@ -793,8 +793,16 @@ def interp_nwp_from_xy_grid(
         grid_ids = _get_grids_for_model(model_name)
     else:
         grid_ids = [grid_id]
-
+    print('=========')
+    print(grid_ids)
+    print('=========')
+    
     num_grids = len(grid_ids)
+    
+    print('=========')
+    print(num_grids)
+    print('=========')
+    
     x_points_by_grid_metres = [numpy.array([])] * num_grids
     y_points_by_grid_metres = [numpy.array([])] * num_grids
     query_point_table_by_grid = [pandas.DataFrame()] * num_grids
