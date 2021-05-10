@@ -407,27 +407,6 @@ def _interp_soundings_from_nwp(
             include_surface=include_surface
         )[:2]
     )
-
-    target_point_table.to_csv('/ourdisk/hpc/ai2es/randychase/debug/target_point_table.csv')
-    print('===================')
-    print(sounding_field_names)
-    print('===================')
-    
-    print('===================')
-    print(sounding_field_names_grib1)
-    print('===================')
-    
-    print('===================')
-    print(grid_id)
-    print('===================')
-    
-    print('===================')
-    print(wgrib_exe_name)
-    print('===================')
-    
-    print('===================')
-    print(wgrib2_exe_name)
-    print('===================')
     
     return interp.interp_nwp_from_xy_grid(
         query_point_table=target_point_table, field_names=sounding_field_names,
