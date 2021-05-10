@@ -283,8 +283,9 @@ def _read_nwp_for_interp(
             init_time_unix_sec=init_times_unix_sec[i], model_name=model_name,
             grid_id=grid_id, lead_time_hours=FORECAST_LEAD_TIME_HOURS,
             raise_error_if_missing=raise_error_if_missing)
-
+        print(this_grib_file_name)
         if not os.path.isfile(this_grib_file_name):
+            print('FILE NOT FOUND')
             missing_data = True
             list_of_model_grids[i] = None
             list_of_model_grids_other_wind_component[i] = None
