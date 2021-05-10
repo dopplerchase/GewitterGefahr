@@ -283,7 +283,7 @@ def _read_nwp_for_interp(
             init_time_unix_sec=init_times_unix_sec[i], model_name=model_name,
             grid_id=grid_id, lead_time_hours=FORECAST_LEAD_TIME_HOURS,
             raise_error_if_missing=raise_error_if_missing)
-        print(this_grib_file_name)
+        
         if not os.path.isfile(this_grib_file_name):
             print('FILE NOT FOUND')
             missing_data = True
@@ -831,13 +831,6 @@ def interp_nwp_from_xy_grid(
     num_query_time_ranges = len(query_to_model_times_table.index)
     num_fields = len(field_names)
     interp_done_by_field = numpy.full(num_fields, False, dtype=bool)
-
-    print('=========')
-    print(num_init_times)
-    print('=========')
-    print('=========')
-    print(num_fields)
-    print('=========')
     
     for j in range(num_fields):
         if interp_done_by_field[j]:
