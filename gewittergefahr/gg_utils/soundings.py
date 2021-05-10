@@ -408,6 +408,15 @@ def _interp_soundings_from_nwp(
         )[:2]
     )
 
+    target_point_table.to_csv('/ourdisk/hpc/ai2es/randychase/debug/target_point_table.csv')
+    print('===================')
+    print(sounding_field_names)
+    print('===================')
+    
+    print('===================')
+    print(sounding_field_names_grib1)
+    print('===================')
+    
     return interp.interp_nwp_from_xy_grid(
         query_point_table=target_point_table, field_names=sounding_field_names,
         field_names_grib1=sounding_field_names_grib1, model_name=model_name,
