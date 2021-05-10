@@ -834,7 +834,6 @@ def interp_nwp_from_xy_grid(
     print('=========')
     print(num_init_times)
     print('=========')
-    
     print('=========')
     print(num_fields)
     print('=========')
@@ -880,7 +879,7 @@ def interp_nwp_from_xy_grid(
                 raise_error_if_missing=raise_error_if_missing)
 
             if missing_data:
-                print('labeled_missing_data!!')
+                print('labeled_missing_data!!',i)
                 continue
 
             list_of_spatial_interp_arrays = [numpy.array([])] * num_init_times
