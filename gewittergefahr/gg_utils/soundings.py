@@ -417,6 +417,18 @@ def _interp_soundings_from_nwp(
     print(sounding_field_names_grib1)
     print('===================')
     
+    print('===================')
+    print(grid_id)
+    print('===================')
+    
+    print('===================')
+    print(wgrib_exe_name)
+    print('===================')
+    
+    print('===================')
+    print(wgrib2_exe_name)
+    print('===================')
+    
     return interp.interp_nwp_from_xy_grid(
         query_point_table=target_point_table, field_names=sounding_field_names,
         field_names_grib1=sounding_field_names_grib1, model_name=model_name,
