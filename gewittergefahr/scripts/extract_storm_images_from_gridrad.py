@@ -237,8 +237,7 @@ def _extract_storm_images(
         print('Removed {0:d} of {1:d} storm objects!\n'.format(
             num_storm_objects_orig - num_storm_objects, num_storm_objects_orig
         ))
-    #debug line (5/17/21; RJC) see if we can add the tornado string to output     
-    storm_object_table.to_csv('/home/randychase/ai2es/debug/storm_table.csv')
+        
     # Extract storm-centered radar images.
     storm_images.extract_storm_images_gridrad(
         storm_object_table=storm_object_table,
