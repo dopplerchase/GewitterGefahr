@@ -5,7 +5,7 @@ import numpy as np
 from tqdm import tqdm
 import glob
 import gc
-
+import os 
 from gridrad_tools import gridrad 
 
 IN_DIR_INPUT_ARG = 'input_directory_name'
@@ -39,16 +39,21 @@ def _sparse2grid(input_directory_name, output_directory_name):
     
     for i in tqdm(np.arange(0,len(filelist))):
          filename = filelist[i]
-         #the gridrad object will open the raw sparse netcdf
-         gr = gridrad(filename=filename,filter=True,toxr=True)
          end_path = filename[-49:]
-         beg_path =output_directory_name
+         beg_path = output_directory_name
          savename = beg_path + end_path 
-         #save the gridded product 
-         gr.ds.to_netcdf(savename,mode='w')
-         gr.ds.close()
-         del gr 
-         gc.collect()
+         #to save comp. time, check to see if file already exists. 
+         if os.path.exists(savename):
+                continue
+         else:
+             #the gridrad object will open the raw sparse netcdf
+             gr = gridrad(filename=filename,filter=True,toxr=True)
+
+             #save the gridded product 
+             gr.ds.to_netcdf(savename,mode='w')
+             gr.ds.close()
+             del gr 
+             gc.collect()
          
     return 
     
