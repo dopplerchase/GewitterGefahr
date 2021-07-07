@@ -34,6 +34,7 @@ from gewittergefahr.gg_utils import gridrad_utils
 from gewittergefahr.gg_utils import nwp_model_utils
 from gewittergefahr.gg_utils import time_conversion
 from pathlib import Path
+from tqdm import tqdm 
 
 GRIDRAD_FILE_EXTENSION = '.nc'
 
@@ -169,7 +170,7 @@ def _convert_to_myrorss_format(
     last_hour_string = 'NaN'
     target_height_matrix_m_asl = None
     
-    for this_gridrad_file_name in gridrad_file_names:
+    for this_gridrad_file_name in tqdm(gridrad_file_names):
         #To save time check to see if file already exists: (added by RJC on 07-07-21)
         if check_if_exists:
             #build myrorss_filepath,split some stuff from the filename to save time not loading the data 
