@@ -178,9 +178,9 @@ def _convert_to_myrorss_format(
             yyyy = this_gridrad_file_name[-19:-15]
             this_myrorss_file_name = yyyymmdd + '-' + hhmmss + '.netcdf'
             this_myrorss_file_name = top_myrorss_dir_name + yyyy + '/' + yyyymmdd + '/' + radar_utils.FIELD_NAME_TO_MYRORSS_DICT[output_field_name] + '/00.25/'  + yyyymmdd + '-' + hhmmss + '.netcdf'
-            my_file = Path(output_field_name)
+            my_file = Path(this_myrorss_file_name)
             if my_file.is_file():
-                print('This file aleady exists {}. Skipping'.format(his_myrorss_file_name))
+                print('This file aleady exists {}. Skipping'.format(this_myrorss_file_name))
                 continue 
                 
         this_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
