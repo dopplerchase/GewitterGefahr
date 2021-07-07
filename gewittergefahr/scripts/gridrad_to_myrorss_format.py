@@ -182,78 +182,78 @@ def _convert_to_myrorss_format(
             if my_file.is_file():
                 print('This file aleady exists {}. Skipping'.format(his_myrorss_file_name))
                 continue 
-        else:
-            this_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
-                this_gridrad_file_name)
-            this_time_unix_sec = this_metadata_dict[radar_utils.UNIX_TIME_COLUMN]
+                
+        this_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
+            this_gridrad_file_name)
+        this_time_unix_sec = this_metadata_dict[radar_utils.UNIX_TIME_COLUMN]
 
-            (this_refl_matrix_dbz, these_grid_point_heights_m_asl,
-             these_grid_point_latitudes_deg, these_grid_point_longitudes_deg
-            ) = gridrad_io.read_field_from_full_grid_file(
-                netcdf_file_name=this_gridrad_file_name,
-                field_name=INPUT_FIELD_NAME, metadata_dict=this_metadata_dict)
+        (this_refl_matrix_dbz, these_grid_point_heights_m_asl,
+         these_grid_point_latitudes_deg, these_grid_point_longitudes_deg
+        ) = gridrad_io.read_field_from_full_grid_file(
+            netcdf_file_name=this_gridrad_file_name,
+            field_name=INPUT_FIELD_NAME, metadata_dict=this_metadata_dict)
 
-            if output_field_name == radar_utils.REFL_M10CELSIUS_NAME:
-                this_hour_string = time_conversion.unix_sec_to_string(
-                    this_time_unix_sec, TIME_FORMAT_HOUR)
+        if output_field_name == radar_utils.REFL_M10CELSIUS_NAME:
+            this_hour_string = time_conversion.unix_sec_to_string(
+                this_time_unix_sec, TIME_FORMAT_HOUR)
 
-                if this_hour_string != last_hour_string:
-                    if this_time_unix_sec >= RAP_RUC_CUTOFF_TIME_UNIX_SEC:
-                        this_model_name = nwp_model_utils.RAP_MODEL_NAME
-                        this_top_model_dir_name = top_rap_dir_name
-                    else:
-                        this_model_name = nwp_model_utils.RUC_MODEL_NAME
-                        this_top_model_dir_name = top_ruc_dir_name
+            if this_hour_string != last_hour_string:
+                if this_time_unix_sec >= RAP_RUC_CUTOFF_TIME_UNIX_SEC:
+                    this_model_name = nwp_model_utils.RAP_MODEL_NAME
+                    this_top_model_dir_name = top_rap_dir_name
+                else:
+                    this_model_name = nwp_model_utils.RUC_MODEL_NAME
+                    this_top_model_dir_name = top_ruc_dir_name
 
-                    target_height_matrix_m_asl = (
-                        gridrad_utils.interp_temperature_surface_from_nwp(
-                            radar_grid_point_latitudes_deg=
-                            these_grid_point_latitudes_deg,
-                            radar_grid_point_longitudes_deg=
-                            these_grid_point_longitudes_deg,
-                            radar_time_unix_sec=this_time_unix_sec,
-                            critical_temperature_kelvins=TEMPERATURE_LEVEL_KELVINS,
-                            model_name=this_model_name, use_all_grids=False,
-                            grid_id=nwp_model_utils.NAME_OF_130GRID,
-                            top_grib_directory_name=this_top_model_dir_name)
-                    )
-
-                    last_hour_string = copy.deepcopy(this_hour_string)
-
-                this_output_matrix = gridrad_utils.interp_reflectivity_to_heights(
-                    reflectivity_matrix_dbz=this_refl_matrix_dbz,
-                    grid_point_heights_m_asl=these_grid_point_heights_m_asl,
-                    target_height_matrix_m_asl=target_height_matrix_m_asl)
-
-            elif output_field_name == radar_utils.REFL_COLUMN_MAX_NAME:
-                this_output_matrix = gridrad_utils.get_column_max_reflectivity(
-                    this_refl_matrix_dbz)
-            else:
-                this_output_matrix = gridrad_utils.get_echo_tops(
-                    reflectivity_matrix_dbz=this_refl_matrix_dbz,
-                    grid_point_heights_m_asl=these_grid_point_heights_m_asl,
-                    critical_reflectivity_dbz=
-                    radar_utils.field_name_to_echo_top_refl(output_field_name)
+                target_height_matrix_m_asl = (
+                    gridrad_utils.interp_temperature_surface_from_nwp(
+                        radar_grid_point_latitudes_deg=
+                        these_grid_point_latitudes_deg,
+                        radar_grid_point_longitudes_deg=
+                        these_grid_point_longitudes_deg,
+                        radar_time_unix_sec=this_time_unix_sec,
+                        critical_temperature_kelvins=TEMPERATURE_LEVEL_KELVINS,
+                        model_name=this_model_name, use_all_grids=False,
+                        grid_id=nwp_model_utils.NAME_OF_130GRID,
+                        top_grib_directory_name=this_top_model_dir_name)
                 )
 
-            this_spc_date_string = time_conversion.time_to_spc_date_string(
-                this_time_unix_sec)
+                last_hour_string = copy.deepcopy(this_hour_string)
 
-            this_myrorss_file_name = myrorss_and_mrms_io.find_raw_file(
-                unix_time_sec=this_time_unix_sec,
-                spc_date_string=this_spc_date_string, field_name=output_field_name,
-                data_source=radar_utils.MYRORSS_SOURCE_ID,
-                top_directory_name=top_myrorss_dir_name,
-                raise_error_if_missing=False)
-            this_myrorss_file_name = this_myrorss_file_name.replace('.gz', '')
+            this_output_matrix = gridrad_utils.interp_reflectivity_to_heights(
+                reflectivity_matrix_dbz=this_refl_matrix_dbz,
+                grid_point_heights_m_asl=these_grid_point_heights_m_asl,
+                target_height_matrix_m_asl=target_height_matrix_m_asl)
 
-            print('Writing "{0:s}" to MYRORSS file: "{1:s}"...'.format(
-                output_field_name, this_myrorss_file_name))
+        elif output_field_name == radar_utils.REFL_COLUMN_MAX_NAME:
+            this_output_matrix = gridrad_utils.get_column_max_reflectivity(
+                this_refl_matrix_dbz)
+        else:
+            this_output_matrix = gridrad_utils.get_echo_tops(
+                reflectivity_matrix_dbz=this_refl_matrix_dbz,
+                grid_point_heights_m_asl=these_grid_point_heights_m_asl,
+                critical_reflectivity_dbz=
+                radar_utils.field_name_to_echo_top_refl(output_field_name)
+            )
 
-            myrorss_and_mrms_io.write_field_to_myrorss_file(
-                field_matrix=this_output_matrix,
-                netcdf_file_name=this_myrorss_file_name,
-                field_name=output_field_name, metadata_dict=this_metadata_dict)
+        this_spc_date_string = time_conversion.time_to_spc_date_string(
+            this_time_unix_sec)
+
+        this_myrorss_file_name = myrorss_and_mrms_io.find_raw_file(
+            unix_time_sec=this_time_unix_sec,
+            spc_date_string=this_spc_date_string, field_name=output_field_name,
+            data_source=radar_utils.MYRORSS_SOURCE_ID,
+            top_directory_name=top_myrorss_dir_name,
+            raise_error_if_missing=False)
+        this_myrorss_file_name = this_myrorss_file_name.replace('.gz', '')
+
+        print('Writing "{0:s}" to MYRORSS file: "{1:s}"...'.format(
+            output_field_name, this_myrorss_file_name))
+
+        myrorss_and_mrms_io.write_field_to_myrorss_file(
+            field_matrix=this_output_matrix,
+            netcdf_file_name=this_myrorss_file_name,
+            field_name=output_field_name, metadata_dict=this_metadata_dict)
 
 
 if __name__ == '__main__':
