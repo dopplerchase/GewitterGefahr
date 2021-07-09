@@ -35,6 +35,7 @@ from gewittergefahr.gg_utils import nwp_model_utils
 from gewittergefahr.gg_utils import time_conversion
 from pathlib import Path
 from tqdm import tqdm 
+import glob
 
 GRIDRAD_FILE_EXTENSION = '.nc'
 
