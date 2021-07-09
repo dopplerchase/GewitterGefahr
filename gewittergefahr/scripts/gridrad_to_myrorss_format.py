@@ -182,6 +182,8 @@ def _convert_to_myrorss_format(
 
     #Lets do specific dates at a time 
     gridrad_file_names = glob.glob(top_gridrad_dir_name + '/*/' + spc_date_string + '/*.nc')
+    print(top_gridrad_dir_name + '/*/' + spc_date_string + '/*.nc \n')
+    print(gridrad_file_names)
     if len(gridrad_file_names) < 1:
         print('no files found!')
     gridrad_file_names.sort()
