@@ -57,6 +57,7 @@ MYRORSS_DIR_ARG_NAME = 'output_myrorss_dir_name'
 RUC_DIR_ARG_NAME = 'input_ruc_dir_name'
 RAP_DIR_ARG_NAME = 'input_rap_dir_name'
 OUTPUT_FIELD_ARG_NAME = 'output_field_name'
+SPC_DATE_ARG_NAME = 'spc_date_string'
 
 GRIDRAD_DIR_HELP_STRING = (
     'Name of top-level directory with GridRad data (files readable by'
@@ -82,6 +83,11 @@ RAP_DIR_HELP_STRING = (
 OUTPUT_FIELD_HELP_STRING = (
     'Name of output field (will be written to MYRORSS files).  Must be in the '
     'following list:\n{0:s}').format(str(VALID_OUTPUT_FIELD_NAMES))
+
+SPC_DATE_HELP_STRING = (
+    'SPC date (format "yyyymmdd").  File conversion will be done for all '
+    'time steps on this date.'
+)
 
 TOP_GRIDRAD_DIR_NAME_DEFAULT = (
     '/condo/swatcommon/common/gridrad_final/native_format'
@@ -112,6 +118,10 @@ INPUT_ARG_PARSER.add_argument(
 INPUT_ARG_PARSER.add_argument(
     '--' + OUTPUT_FIELD_ARG_NAME, type=str, required=False,
     default=radar_utils.ECHO_TOP_40DBZ_NAME, help=OUTPUT_FIELD_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + SPC_DATE_ARG_NAME, type=str, required=True,
+    help=SPC_DATE_HELP_STRING)
 
 
 def _check_output_field(output_field_name):
@@ -155,7 +165,7 @@ def _find_gridrad_files(top_gridrad_dir_name):
 
 def _convert_to_myrorss_format(
         top_gridrad_dir_name, top_myrorss_dir_name, top_ruc_dir_name,
-        top_rap_dir_name, output_field_name,check_if_exists=True):
+        top_rap_dir_name, output_field_name,spc_date_string,check_if_exists=True):
     """Converts GridRad data to MYRORSS format.
 
     :param top_gridrad_dir_name: See documentation at top of file.
@@ -166,7 +176,15 @@ def _convert_to_myrorss_format(
     :param check_if_exists: bool, will have it overwrite files if false
     """
 
-    gridrad_file_names = _find_gridrad_files(top_gridrad_dir_name)
+    #this was the orignal filegrabbing tech. But this takes too long. 
+#     gridrad_file_names = _find_gridrad_files(top_gridrad_dir_name)
+
+    #Lets do specific dates at a time 
+    gridrad_file_names = glob.glob(top_gridrad_dir_name + '/*/' + spc_date_string + '/*.nc')
+    if len(gridrad_file_names) < 1:
+        print('no files found!')
+    gridrad_file_names.sort()
+    
     last_hour_string = 'NaN'
     target_height_matrix_m_asl = None
     
@@ -264,6 +282,7 @@ if __name__ == '__main__':
     TOP_RUC_DIR_NAME = getattr(INPUT_ARG_OBJECT, RUC_DIR_ARG_NAME)
     TOP_RAP_DIR_NAME = getattr(INPUT_ARG_OBJECT, RAP_DIR_ARG_NAME)
     OUTPUT_FIELD_NAME = getattr(INPUT_ARG_OBJECT, OUTPUT_FIELD_ARG_NAME)
+    SPC_DATE_STRING = getattr(INPUT_ARG_OBJECT, SPC_DATE_ARG_NAME)
 
     _check_output_field(OUTPUT_FIELD_NAME)
 
@@ -271,4 +290,5 @@ if __name__ == '__main__':
         top_gridrad_dir_name=TOP_GRIDRAD_DIR_NAME,
         top_myrorss_dir_name=TOP_MYRORSS_DIR_NAME,
         top_ruc_dir_name=TOP_RUC_DIR_NAME, top_rap_dir_name=TOP_RAP_DIR_NAME,
-        output_field_name=OUTPUT_FIELD_NAME)
+        output_field_name=OUTPUT_FIELD_NAME,
+        spc_date_string=SPC_DATE_STRING)
