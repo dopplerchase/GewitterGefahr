@@ -13,6 +13,8 @@ from gewittergefahr.gg_utils import unzipping
 from gewittergefahr.gg_utils import radar_sparse_to_full as radar_s2f
 from gewittergefahr.gg_utils import echo_classification as echo_classifn
 
+from tqdm import tqdm 
+
 SEPARATOR_STRING = '\n\n' + '*' * 50 + '\n\n'
 
 TIME_INTERVAL_SEC = 300
@@ -176,7 +178,7 @@ def _run_for_gridrad(
     radar_file_names = [''] * num_times
     indices_to_keep = []
 
-    for i in range(num_times):
+    for i in tqdm(range(num_times)):
         radar_file_names[i] = gridrad_io.find_file(
             top_directory_name=top_radar_dir_name,
             unix_time_sec=valid_times_unix_sec[i],
@@ -190,7 +192,7 @@ def _run_for_gridrad(
     radar_file_names = [radar_file_names[k] for k in indices_to_keep]
     num_times = len(valid_times_unix_sec)
 
-    for i in range(num_times):
+    for i in tqdm(range(num_times)):
         print('Reading data from: "{0:s}"...\n'.format(radar_file_names[i]))
         radar_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
             netcdf_file_name=radar_file_names[i])
