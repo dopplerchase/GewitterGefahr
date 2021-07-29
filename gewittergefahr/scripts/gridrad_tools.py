@@ -1,3 +1,5 @@
+import time 
+
 class gridrad:
     """
     Name: GRIDRAD Python Class
@@ -15,11 +17,17 @@ class gridrad:
         
         if self.filename is not None:
             #auto read the file 
+            stime = time.time()
             self.read_file()
-            
+            print('Time to read file: {}'.format(time.time()-stime)
+                  
         if filter:
+            stime = time.time()
             self.filter()
+            print('Time to filter: {}'.format(time.time()-stime)
+            stime = time.time()
             self.remove_clutter(skip_weak_ll_echo=1)
+            print('Time to filter2: {}'.format(time.time()-stime)
         
         if toxr:
             self.to_xarray()

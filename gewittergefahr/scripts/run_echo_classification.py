@@ -203,7 +203,7 @@ def _run_for_gridrad(
         ) = gridrad_io.read_field_from_full_grid_file(
             netcdf_file_name=radar_file_names[i],
             field_name=radar_utils.REFL_NAME, metadata_dict=radar_metadata_dict)
-        print('total read in time: {}s'.format(time.time() - stime)
+        print('total read in time: {}s'.format(time.time() - stime))
         reflectivity_matrix_dbz = numpy.rollaxis(
             reflectivity_matrix_dbz, axis=0, start=3)
         stime = time.time()
@@ -211,7 +211,7 @@ def _run_for_gridrad(
             [all_heights_m_asl.tolist().index(h) for h in RADAR_HEIGHTS_M_ASL],
             dtype=int)
         reflectivity_matrix_dbz = reflectivity_matrix_dbz[..., height_indices]
-        print('total reshape time: {}s'.format(time.time() - stime)
+        print('total reshape time: {}s'.format(time.time() - stime))
         grid_metadata_dict = {
             echo_classifn.MIN_LATITUDE_KEY: numpy.min(grid_point_latitudes_deg),
             echo_classifn.LATITUDE_SPACING_KEY:
@@ -228,7 +228,7 @@ def _run_for_gridrad(
             valid_time_unix_sec=valid_times_unix_sec[i],
             option_dict=option_dict
         )[0]
-        print('total classification time: {}s'.format(time.time() - stime)
+        print('total classification time: {}s'.format(time.time() - stime))
         print('Number of convective pixels = {0:d}\n'.format(
             numpy.sum(convective_flag_matrix)
         ))
