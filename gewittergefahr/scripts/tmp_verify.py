@@ -353,4 +353,4 @@ def validate_examples(input_example_filename,storm_image_dir='/ourdisk/hpc/ai2es
         
         return ds_images 
     
-ds_images = validate_examples('/ourdisk/hpc/ai2es/tornado/learning_examples/2018/input_examples_20180310.nc')
+ds_images = validate_examples('/ourdisk/hpc/ai2es/tornado/learning_examples/2018/input_examples_20180318.nc')
