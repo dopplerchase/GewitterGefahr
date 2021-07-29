@@ -59,7 +59,7 @@ def validate_examples(input_example_filename,storm_image_dir='/ourdisk/hpc/ai2es
     3) Distance between storm and report (in km), this is the distance between the storm centroid and the tornado report."""
     
     #load nexrad loc dataframe
-    df_nexrad = pd.read_csv('/Users/randyjc2/PythonWorkspace/Data/NEXRAD_LOC.csv',index_col=0)
+    df_nexrad = pd.read_csv(nexrad_loc_csv,index_col=0)
     
     #load example image file 
     ds_images = xr.open_dataset(input_example_filename)
