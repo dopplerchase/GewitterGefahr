@@ -53,7 +53,7 @@ def _download_rap_analyses(first_init_time_string, last_init_time_string,
     first_init_time_string  = first_init_time_string + '00'
     s_dtime = datetime.datetime.strptime(first_init_time_string,'%Y%m%d%H')
     e_dtime = s_dtime + datetime.timedelta(days=1)
-    last_init_time_string = e_dtime.strftime('%Y%m%d%H')
+    last_init_time_string = e_dtime.strftime('%Y%m%d') + '06' #err on the side of caution here. Grab files till 6UTC
 
     first_init_time_unix_sec = time_conversion.string_to_unix_sec(
         first_init_time_string, INPUT_TIME_FORMAT
