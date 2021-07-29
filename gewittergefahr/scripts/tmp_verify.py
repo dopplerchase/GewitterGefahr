@@ -45,7 +45,7 @@ def padder2(x):
 def validate_examples(input_example_filename,storm_image_dir='/ourdisk/hpc/ai2es/tornado/images/',
                       level='04000_metres_agl',linkage_dir='/ourdisk/hpc/ai2es/tornado/linked/',
                       seg_dir = '/ourdisk/hpc/ai2es/tornado/final_tracking/',
-                      rad_dir= '/ourdisk/hpc/ai2es/tornado/gridrad_sparse/',
+                      rad_dir= '/ourdisk/hpc/chomeyer/GRIDRAD_SEVERE/volumes/',
                       nexrad_loc_csv = '/ourdisk/hpc/ai2es/tornado/NEXRAD_LOC.csv',
                       save_dir='/ourdisk/hpc/ai2es/tornado/ver_figs/',
                       savefig=True,alterfiles=True,):
