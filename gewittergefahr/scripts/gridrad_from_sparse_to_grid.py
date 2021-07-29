@@ -23,7 +23,7 @@ INPUT_ARG_PARSER.add_argument('--' + OUT_DIR_INPUT_ARG, type=str, required=True,
     
     
 
-def _sparse2grid(input_directory_name, output_directory_name):
+def _sparse2grid(input_directory_name, output_directory_name,check_exist=False):
 
     """Converts the sparse gridrad files to a gridded file needed for the next script
     Right now this is quite slow (doing a simple loop). Look to parallelize this in the
@@ -43,7 +43,7 @@ def _sparse2grid(input_directory_name, output_directory_name):
          beg_path = output_directory_name
          savename = beg_path + end_path 
          #to save comp. time, check to see if file already exists. 
-         if os.path.exists(savename):
+         if os.path.exists(savename) and check_exist:
                 continue
          else:
              #the gridrad object will open the raw sparse netcdf
