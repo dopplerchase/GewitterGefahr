@@ -50,6 +50,7 @@ def _download_rap_analyses(first_init_time_string, last_init_time_string,
     #autodetermine last time from first time; Added by RJC on 29 Jul 2021
     #this was added because I suck at bash coding and this is much easier to do in python 
     import datetime 
+    first_init_time_string  = first_init_time_string + '00'
     s_dtime = datetime.datetime.strptime(first_init_time_string,'%Y%m%d%H')
     e_dtime = s_dtime + datetime.timedelta(days=1)
     last_init_time_unix_sec = e_dtime.strftime('%Y%m%d%H')
