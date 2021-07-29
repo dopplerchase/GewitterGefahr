@@ -14,6 +14,7 @@ from gewittergefahr.gg_utils import radar_sparse_to_full as radar_s2f
 from gewittergefahr.gg_utils import echo_classification as echo_classifn
 
 from tqdm import tqdm 
+import time
 
 SEPARATOR_STRING = '\n\n' + '*' * 50 + '\n\n'
 
@@ -196,21 +197,21 @@ def _run_for_gridrad(
         print('Reading data from: "{0:s}"...\n'.format(radar_file_names[i]))
         radar_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
             netcdf_file_name=radar_file_names[i])
-
+        stime = time.time()
         (reflectivity_matrix_dbz, all_heights_m_asl, grid_point_latitudes_deg,
          grid_point_longitudes_deg
         ) = gridrad_io.read_field_from_full_grid_file(
             netcdf_file_name=radar_file_names[i],
             field_name=radar_utils.REFL_NAME, metadata_dict=radar_metadata_dict)
-
+        print('total read in time: {}s'.format(time.time() - stime)
         reflectivity_matrix_dbz = numpy.rollaxis(
             reflectivity_matrix_dbz, axis=0, start=3)
-
+        stime = time.time()
         height_indices = numpy.array(
             [all_heights_m_asl.tolist().index(h) for h in RADAR_HEIGHTS_M_ASL],
             dtype=int)
         reflectivity_matrix_dbz = reflectivity_matrix_dbz[..., height_indices]
-
+        print('total reshape time: {}s'.format(time.time() - stime)
         grid_metadata_dict = {
             echo_classifn.MIN_LATITUDE_KEY: numpy.min(grid_point_latitudes_deg),
             echo_classifn.LATITUDE_SPACING_KEY:
@@ -220,14 +221,14 @@ def _run_for_gridrad(
                 grid_point_longitudes_deg[1] - grid_point_longitudes_deg[0],
             echo_classifn.HEIGHTS_KEY: RADAR_HEIGHTS_M_ASL
         }
-
+        stime=time.time()
         convective_flag_matrix = echo_classifn.find_convective_pixels(
             reflectivity_matrix_dbz=reflectivity_matrix_dbz,
             grid_metadata_dict=grid_metadata_dict,
             valid_time_unix_sec=valid_times_unix_sec[i],
             option_dict=option_dict
         )[0]
-
+        print('total classification time: {}s'.format(time.time() - stime)
         print('Number of convective pixels = {0:d}\n'.format(
             numpy.sum(convective_flag_matrix)
         ))
