@@ -1,6 +1,8 @@
 from gridrad_tools import gridrad
 from matplotlib import patheffects
 import matplotlib.pyplot as plt 
+import matplotlib
+matplotlib.use('Agg')
 import numpy as np 
 import xarray as xr
 import netCDF4 
@@ -10,6 +12,17 @@ from tqdm import tqdm
 
 import warnings 
 warnings.filterwarnings('ignore')
+
+#plot parameters that I personally like, feel free to make these your own.
+matplotlib.rcParams['axes.facecolor'] = [0.9,0.9,0.9]
+matplotlib.rcParams['axes.labelsize'] = 14
+matplotlib.rcParams['axes.titlesize'] = 14
+matplotlib.rcParams['xtick.labelsize'] = 10
+matplotlib.rcParams['ytick.labelsize'] = 10
+matplotlib.rcParams['legend.fontsize'] = 12
+matplotlib.rcParams['legend.facecolor'] = 'w'
+matplotlib.rcParams['savefig.transparent'] = False
+
 
 pe = [patheffects.withStroke(linewidth=3,
                              foreground="w")]
