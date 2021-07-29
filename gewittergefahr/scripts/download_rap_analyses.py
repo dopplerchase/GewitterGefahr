@@ -46,6 +46,13 @@ def _download_rap_analyses(first_init_time_string, last_init_time_string,
     :param last_init_time_string: Same.
     :param top_local_directory_name: Same.
     """
+    
+    #autodetermine last time from first time; Added by RJC on 29 Jul 2021
+    #this was added because I suck at bash coding and this is much easier to do in python 
+    import datetime 
+    s_dtime = datetime.datetime.strptime(first_init_time_string,'%Y%m%d%H')
+    e_dtime = s_dtime + datetime.timedelta(days=1)
+    last_init_time_unix_sec = e_dtime.strftime('%Y%m%d%H')
 
     first_init_time_unix_sec = time_conversion.string_to_unix_sec(
         first_init_time_string, INPUT_TIME_FORMAT
