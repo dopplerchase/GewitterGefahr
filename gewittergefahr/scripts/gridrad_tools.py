@@ -612,16 +612,31 @@ class gridrad:
             
         import xarray as xr
         import numpy as np 
-        da = xr.DataArray(data[variable_key_in]['values'][np.newaxis,:,:,:], 
+        if (variable_key_in =='Z_DR') or (variable_key_in =='K_DP') or (variable_key_in =='r_HV'):
+                if type(data[variable_key_in]) == int:
+                        da = xr.DataArray(np.ones(data['Z_H']['values'][np.newaxis,:,:,:].shape)*-9999, 
                           dims=['time','Altitude','Latitude','Longitude'],
                           coords={'time': [time],
                                   'Longitude': data['x']['values'],
                                   'Latitude': data['y']['values'],
                                   'Altitude': data['z']['values']})
+                else:
+                        da = xr.DataArray(data[variable_key_in]['values'][np.newaxis,:,:,:], 
+                          dims=['time','Altitude','Latitude','Longitude'],
+                          coords={'time': [time],
+                                  'Longitude': data['x']['values'],
+                                  'Latitude': data['y']['values'],
+                                  'Altitude': data['z']['values']})
+        else:            
+            da = xr.DataArray(data[variable_key_in]['values'][np.newaxis,:,:,:], 
+                              dims=['time','Altitude','Latitude','Longitude'],
+                              coords={'time': [time],
+                                      'Longitude': data['x']['values'],
+                                      'Latitude': data['y']['values'],
+                                      'Altitude': data['z']['values']})
         da.fillna(value=-9999)
         
         if self.ds is None:
             self.ds = da.to_dataset(name = variable_key_out)
         else:
-            self.ds[variable_key_out] = da 
-        
+            self.ds[variable_key_out] = da
