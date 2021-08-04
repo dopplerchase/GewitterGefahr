@@ -79,18 +79,18 @@ def _download_ruc_analyses(
             this_init_time_string = time_conversion.unix_sec_to_string(
                 init_times_unix_sec[i], DEFAULT_TIME_FORMAT)
 
-            print '\nPROBLEM.  Download failed for {0:s}.\n\n'.format(
-                this_init_time_string)
+            print('\nPROBLEM.  Download failed for {0:s}.\n\n'.format(
+                this_init_time_string))
         else:
-            print '\nSUCCESS.  File was downloaded to "{0:s}".\n\n'.format(
-                local_file_names[i])
+            print('\nSUCCESS.  File was downloaded to "{0:s}".\n\n'.format(
+                local_file_names[i]))
 
         time.sleep(PAUSE_BETWEEN_FILES_IN_SECONDS)
 
     num_downloaded = numpy.sum(numpy.array(
         [f is not None for f in local_file_names]))
-    print '{0:d} of {1:d} files were downloaded successfully!'.format(
-        num_downloaded, num_times)
+    print('{0:d} of {1:d} files were downloaded successfully!'.format(
+        num_downloaded, num_times))
 
 
 if __name__ == '__main__':
