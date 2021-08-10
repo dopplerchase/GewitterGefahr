@@ -13,6 +13,96 @@ from tqdm import tqdm
 import warnings 
 warnings.filterwarnings('ignore')
 
+import argparse
+
+LEARNING_EXAMPLE_FILE_ARG_NAME = 'learning_example_file'
+STORM_IMAGE_DIR_ARG_NAME = 'storm_image_dir'
+LEVEL_TO_PLOT_ARG_NAME = 'level'
+LINKAGE_DIR_ARG_NAME = 'linkage_dir'
+SEGMOTION_DIR_ARG_NAME = 'seg_dir'
+GRIDRAD_DIR_ARG_NAME = 'rad_dir'
+NEXRAD_LOC_ARG_NAME = 'nexrad_loc_csv'
+SAVE_DIR_ARG_NAME = 'save_dir'
+SAVEFIG_BOOL_ARG_NAME = 'savefig'
+ALTER_FILES_BOOL_ARG_NAME = 'alterfiles'
+
+LEARNING_EXAMPLE_FILE_HELP_STRING = (
+    'file you wish to verify')
+
+STORM_IMAGE_DIR_HELP_STRING = (
+    'directory path where storm images are.')
+
+LEVEL_TO_PLOT_HELP_STRING = (
+    'Which height of radar data to plot')
+
+LINKAGE_DIR_HELP_STRING = (
+    'directory path where linked files are')
+
+SEGMOTION_DIR_HELP_STRING = (
+    'directory path where segmotion tracking files are')
+
+GRIDRAD_DIR_HELP_STRING = (
+    'directory path where gridded gridrad files are')
+
+NEXRAD_LOC_HELP_STRING = (
+    'Location of nexrad locations csv file')
+
+SAVE_DIR_HELP_STRING = (
+    'Path of where to save the .png images')
+
+SAVEFIG_BOOL_HELP_STRING = (
+    'Turn on or off the saving of the .pngs')
+
+ALTER_FILES_BOOL_HELP_STRING = (
+    'Turn on off the adding of extra metadata')
+
+INPUT_ARG_PARSER = argparse.ArgumentParser()
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + LEARNING_EXAMPLE_FILE_ARG_NAME, type=str, required=True,
+    default='', help=LEARNING_EXAMPLE_FILE_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + STORM_IMAGE_DIR_ARG_NAME, type=str, required=True,
+    default='',
+    help=STORM_IMAGE_DIR_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + LEVEL_TO_PLOT_ARG_NAME, type=str,required=False,
+    default='04000_metres_agl', help=LEVEL_TO_PLOT_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + LINKAGE_DIR_ARG_NAME, type=str, required=True,
+    default='',
+    help=LINKAGE_DIR_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + SEGMOTION_DIR_ARG_NAME, type=str, required=True,
+    default'',
+    help=SEGMOTION_DIR_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + GRIDRAD_DIR_ARG_NAME, type=str,required=True,
+    default='',
+    help=GRIDRAD_DIR_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + NEXRAD_LOC_ARG_NAME, type=str, required=True,
+    help=NEXRAD_LOC_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + SAVE_DIR_ARG_NAME, type=str, required=True,
+    default='', help=SAVE_DIR_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + SAVEFIG_BOOL_ARG_NAME, type=bool, required=False,default=True,
+    help=SAVEFIG_BOOL_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + ALTER_FILES_BOOL_ARG_NAME, type=bool, required=False,
+    default=False, help=ALTER_FILES_BOOL_HELP_STRING)
+
+
 #plot parameters that I personally like, feel free to make these your own.
 matplotlib.rcParams['axes.facecolor'] = [0.9,0.9,0.9]
 matplotlib.rcParams['axes.labelsize'] = 14
@@ -42,13 +132,12 @@ def padder2(x):
         x = str(x)
     return x
 
-def validate_examples(input_example_filename,storm_image_dir='/ourdisk/hpc/ai2es/tornado/images/',
-                      level='04000_metres_agl',linkage_dir='/ourdisk/hpc/ai2es/tornado/linked/',
-                      seg_dir = '/ourdisk/hpc/ai2es/tornado/final_tracking/',
-                      rad_dir= '/ourdisk/hpc/chomeyer/GRIDRAD_SEVERE/volumes/',
-                      nexrad_loc_csv = '/ourdisk/hpc/ai2es/tornado/NEXRAD_LOC.csv',
-                      save_dir='/ourdisk/hpc/ai2es/tornado/ver_figs/',
-                      savefig=True,alterfiles=True,):
+
+def validate_examples(input_example_filename,storm_image_dir=storm_image_dir,
+                      level=level,linkage_dir=linkage_dir,seg_dir = seg_dir,rad_dir=rad_dir,
+                      nexrad_loc_csv =nexrad_loc_csv,
+                      save_dir=save_dir,
+                      savefig=savefig,alterfiles=alterfiles,):
     
     """ This method is intened to buld trust in the user running Dr. Lagerquist's code. 
     What this does is that it will go ahead and plot simple maps to show where the reported tor is.
@@ -352,5 +441,9 @@ def validate_examples(input_example_filename,storm_image_dir='/ourdisk/hpc/ai2es
         ds_images = ds_images.drop(['lame_index','dtime'])
         
         return ds_images 
-    
-ds_images = validate_examples('/ourdisk/hpc/ai2es/tornado/learning_examples/2018/input_examples_20180318.nc')
+
+ds_images = validate_examples(learning_example_file,storm_image_dir=storm_image_dir,
+                      level=level,linkage_dir=linkage_dir,seg_dir = seg_dir,rad_dir=rad_dir,
+                      nexrad_loc_csv =nexrad_loc_csv,
+                      save_dir=save_dir,
+                      savefig=savefig,alterfiles=alterfiles,)
