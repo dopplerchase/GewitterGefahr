@@ -20,9 +20,9 @@ LONGITUDE_TOLERANCE_DEG = 0.01
 YEAR_FORMAT = '%Y'
 TIME_FORMAT_IN_FILE_NAMES = '%Y%m%dT%H%M%SZ'
 #old gridrad file for Lagerquist 2020-2021 have this prefix
-# PATHLESS_FILE_NAME_PREFIX = 'nexrad_3d_4_1'
+PATHLESS_FILE_NAME_PREFIX = 'nexrad_3d_4_1'
 #new files have this prefix: 
-PATHLESS_FILE_NAME_PREFIX = 'nexrad_3d_v4_2'
+PATHLESS_FILE_NAME_PREFIX2 = 'nexrad_3d_v4_2'
 FILE_EXTENSION = '.nc'
 
 KM_TO_METRES = 1000
@@ -48,7 +48,7 @@ def _time_from_gridrad_to_unix(gridrad_time_sec):
 
 
 def _get_pathless_file_name(unix_time_sec):
-    """Determines pathless name of GridRad file.
+    """Determines pathless name of GridRad file. OLD VERSION OF GRIDRAD
 
     :param unix_time_sec: Valid time.
     :return: pathless_file_name: Pathless name of GridRad file.
@@ -56,6 +56,20 @@ def _get_pathless_file_name(unix_time_sec):
 
     return '{0:s}_{1:s}{2:s}'.format(
         PATHLESS_FILE_NAME_PREFIX,
+        time_conversion.unix_sec_to_string(
+            unix_time_sec, TIME_FORMAT_IN_FILE_NAMES),
+        FILE_EXTENSION
+    )
+
+def _get_pathless_file_name2(unix_time_sec):
+    """Determines pathless name of GridRad file. NEW VERSION OF GRIDRAD
+
+    :param unix_time_sec: Valid time.
+    :return: pathless_file_name: Pathless name of GridRad file.
+    """
+
+    return '{0:s}_{1:s}{2:s}'.format(
+        PATHLESS_FILE_NAME_PREFIX2,
         time_conversion.unix_sec_to_string(
             unix_time_sec, TIME_FORMAT_IN_FILE_NAMES),
         FILE_EXTENSION
@@ -149,7 +163,7 @@ def file_name_to_time(gridrad_file_name):
         time_string, TIME_FORMAT_IN_FILE_NAMES)
 
 
-def find_file(unix_time_sec, top_directory_name, raise_error_if_missing=True):
+def find_file(unix_time_sec, top_directory_name, raise_error_if_missing=True,new_version=False):
     """Finds GridRad file on local machine.
 
     Each GridRad file contains all fields at all heights for one valid time.
@@ -166,10 +180,18 @@ def find_file(unix_time_sec, top_directory_name, raise_error_if_missing=True):
     error_checking.assert_is_string(top_directory_name)
 
     spc_date_string = time_conversion.time_to_spc_date_string(unix_time_sec)
-    gridrad_file_name = '{0:s}/{1:s}/{2:s}/{3:s}'.format(
-        top_directory_name, spc_date_string[:4], spc_date_string,
-        _get_pathless_file_name(unix_time_sec)
-    )
+    #Added bool to allow for processing of new and old gridrad files. On 10 Aug 2021 by RJC
+    if new_version:
+        gridrad_file_name = '{0:s}/{1:s}/{2:s}/{3:s}'.format(
+            top_directory_name, spc_date_string[:4], spc_date_string,
+            _get_pathless_file_name2(unix_time_sec)
+        )
+    else:
+        gridrad_file_name = '{0:s}/{1:s}/{2:s}/{3:s}'.format(
+            top_directory_name, spc_date_string[:4], spc_date_string,
+            _get_pathless_file_name(unix_time_sec)
+        )
+        
 
     if raise_error_if_missing and not os.path.isfile(gridrad_file_name):
         error_string = (
