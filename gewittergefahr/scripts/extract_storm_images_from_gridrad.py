@@ -24,6 +24,7 @@ TRACKING_SCALE_ARG_NAME = 'tracking_scale_metres2'
 TARGET_NAME_ARG_NAME = 'target_name'
 TARGET_DIR_ARG_NAME = 'input_target_dir_name'
 OUTPUT_DIR_ARG_NAME = 'output_dir_name'
+NEW_VERSION_ARG_NAME = 'new_gridrad_version'
 
 NUM_ROWS_HELP_STRING = (
     'Number of pixel rows in each storm-centered radar image.')
@@ -86,6 +87,9 @@ TARGET_DIR_HELP_STRING = (
     'therein will be located by `target_val_utils.find_target_file` and read by'
     ' `target_val_utils.read_target_values`.'
 ).format(TARGET_NAME_ARG_NAME)
+
+NEW_VERSION_HELP_STRING = (
+    'true or false for which version of gridrad files')
 
 OUTPUT_DIR_HELP_STRING = (
     'Name of top-level directory for storm-centered radar images.')
@@ -155,13 +159,17 @@ INPUT_ARG_PARSER.add_argument(
     '--' + OUTPUT_DIR_ARG_NAME, type=str, required=True,
     help=OUTPUT_DIR_HELP_STRING)
 
+INPUT_ARG_PARSER.add_argument(
+    '--' + NEW_VERSION_ARG_NAME, type=bool, required=False,default=False,
+    help=NEW_VERSION_HELP_STRING)
+
 
 def _extract_storm_images(
         num_image_rows, num_image_columns, rotate_grids,
         rotated_grid_spacing_metres, radar_field_names, radar_heights_m_agl,
         spc_date_string, top_radar_dir_name, top_tracking_dir_name,
         elevation_dir_name, tracking_scale_metres2, target_name,
-        top_target_dir_name, top_output_dir_name):
+        top_target_dir_name, top_output_dir_name,new_gridrad_version):
     """Extracts storm-centered radar images from GridRad data.
 
     :param num_image_rows: See documentation at top of file.
@@ -248,7 +256,8 @@ def _extract_storm_images(
         num_storm_image_columns=num_image_columns, rotate_grids=rotate_grids,
         rotated_grid_spacing_metres=rotated_grid_spacing_metres,
         radar_field_names=radar_field_names,
-        radar_heights_m_agl=radar_heights_m_agl)
+        radar_heights_m_agl=radar_heights_m_agl,
+        new_version=new_gridrad_version)
 
 
 if __name__ == '__main__':
@@ -271,5 +280,6 @@ if __name__ == '__main__':
             INPUT_ARG_OBJECT, TRACKING_SCALE_ARG_NAME),
         target_name=getattr(INPUT_ARG_OBJECT, TARGET_NAME_ARG_NAME),
         top_target_dir_name=getattr(INPUT_ARG_OBJECT, TARGET_DIR_ARG_NAME),
-        top_output_dir_name=getattr(INPUT_ARG_OBJECT, OUTPUT_DIR_ARG_NAME)
+        top_output_dir_name=getattr(INPUT_ARG_OBJECT, OUTPUT_DIR_ARG_NAME),
+        new_gridrad_version=new_gridrad_version
     )
