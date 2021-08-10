@@ -1475,7 +1475,8 @@ def extract_storm_images_gridrad(
         num_storm_image_columns=DEFAULT_NUM_IMAGE_COLUMNS, rotate_grids=True,
         rotated_grid_spacing_metres=DEFAULT_ROTATED_GRID_SPACING_METRES,
         radar_field_names=DEFAULT_GRIDRAD_FIELD_NAMES,
-        radar_heights_m_agl=DEFAULT_RADAR_HEIGHTS_M_AGL):
+        radar_heights_m_agl=DEFAULT_RADAR_HEIGHTS_M_AGL,
+        new_version=False):
     """Extracts storm-centered image for each field, height, and storm object.
 
     L = number of storm objects
@@ -1538,7 +1539,7 @@ def extract_storm_images_gridrad(
     for i in range(num_times):
         radar_file_names[i] = gridrad_io.find_file(
             unix_time_sec=valid_times_unix_sec[i],
-            top_directory_name=top_radar_dir_name, raise_error_if_missing=True)
+            top_directory_name=top_radar_dir_name, raise_error_if_missing=True,new_version=new_version)
 
     num_times = len(valid_times_unix_sec)
     num_fields = len(radar_field_names)
