@@ -281,5 +281,5 @@ if __name__ == '__main__':
         target_name=getattr(INPUT_ARG_OBJECT, TARGET_NAME_ARG_NAME),
         top_target_dir_name=getattr(INPUT_ARG_OBJECT, TARGET_DIR_ARG_NAME),
         top_output_dir_name=getattr(INPUT_ARG_OBJECT, OUTPUT_DIR_ARG_NAME),
-        new_gridrad_version=new_gridrad_version
+        new_gridrad_version=getattr(INPUT_ARG_OBJECT, NEW_VERSION_ARG_NAME)
     )
