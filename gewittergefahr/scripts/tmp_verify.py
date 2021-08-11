@@ -78,7 +78,7 @@ INPUT_ARG_PARSER.add_argument(
 
 INPUT_ARG_PARSER.add_argument(
     '--' + SEGMOTION_DIR_ARG_NAME, type=str, required=True,
-    default'',
+    default='',
     help=SEGMOTION_DIR_HELP_STRING)
 
 INPUT_ARG_PARSER.add_argument(
