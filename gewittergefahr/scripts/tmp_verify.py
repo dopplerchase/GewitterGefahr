@@ -234,7 +234,8 @@ def validate_examples(input_example_filename,storm_image_dir=storm_image_dir,
             tracking_storm_time = tracking_storm.where(tracking_storm.dtime == time).dropna()
             
             #get raw radar (this will add in spatial (lat/lon) info)
-            file_str = 'nexrad_3d_v4_2_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
+#             file_str = 'nexrad_3d_v4_2_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
+            file_str = 'nexrad_3d_4_1_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
             radar_file = rad_dir + year + '/' + ymd + '/' + file_str
             gr = gridrad(filename=radar_file,filter=True,toxr=True)
 
