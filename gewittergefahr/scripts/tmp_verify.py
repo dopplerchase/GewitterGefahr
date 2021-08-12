@@ -443,8 +443,10 @@ def validate_examples(input_example_filename,storm_image_dir=storm_image_dir,
         
         return ds_images 
 
-ds_images = validate_examples(learning_example_file,storm_image_dir=storm_image_dir,
-                      level=level,linkage_dir=linkage_dir,seg_dir = seg_dir,rad_dir=rad_dir,
-                      nexrad_loc_csv =nexrad_loc_csv,
-                      save_dir=save_dir,
-                      savefig=savefig,alterfiles=alterfiles,)
+if __name__ == '__main__':
+    INPUT_ARG_OBJECT = INPUT_ARG_PARSER.parse_args()
+    ds_images = validate_examples(learning_example_file,storm_image_dir=storm_image_dir,
+                          level=level,linkage_dir=linkage_dir,seg_dir = seg_dir,rad_dir=rad_dir,
+                          nexrad_loc_csv =nexrad_loc_csv,
+                          save_dir=save_dir,
+                          savefig=savefig,alterfiles=alterfiles,)
