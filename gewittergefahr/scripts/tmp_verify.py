@@ -419,7 +419,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                 ax.legend([storm_center,storm,tor,radar],['Storm Centroid','Storm Polygon','Tornado','Closest 88D: {}km'.format(int(np.round(closest_distance)))],loc=10,fontsize=18)
                 ax.axis('off')
                 ax.text(-0.2,0.1,'Tor Time:{}'.format(tor_time),transform=ax.transAxes,fontsize=18)
-                ax.text(-0.24,0,'Rad Time:{}'.format(radar_time),transform=ax.transAxes,fontsize=18)
+                ax.text(-0.24,0,'Rad Time:{}'.format(pd.to_datetime(radar_time).strftime('%Y-%m-%d %H:%M:%S')),transform=ax.transAxes,fontsize=18)
                 plt.tight_layout()
                 savestr = save_dir + input_example_filename[-26:-3] + '/' + padder2(iter_count) + '.png'
                 plt.savefig(savestr,dpi=300)
