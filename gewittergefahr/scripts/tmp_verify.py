@@ -133,11 +133,8 @@ def padder2(x):
     return x
 
 
-def validate_examples(input_example_filename,storm_image_dir=storm_image_dir,
-                      level=level,linkage_dir=linkage_dir,seg_dir = seg_dir,rad_dir=rad_dir,
-                      nexrad_loc_csv =nexrad_loc_csv,
-                      save_dir=save_dir,
-                      savefig=savefig,alterfiles=alterfiles,):
+def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,seg_dir,rad_dir,
+                      nexrad_loc_csv,save_dir,savefig,alterfiles):
     
     """ This method is intened to buld trust in the user running Dr. Lagerquist's code. 
     What this does is that it will go ahead and plot simple maps to show where the reported tor is.
@@ -445,8 +442,13 @@ def validate_examples(input_example_filename,storm_image_dir=storm_image_dir,
 
 if __name__ == '__main__':
     INPUT_ARG_OBJECT = INPUT_ARG_PARSER.parse_args()
-    ds_images = validate_examples(learning_example_file,storm_image_dir=storm_image_dir,
-                          level=level,linkage_dir=linkage_dir,seg_dir = seg_dir,rad_dir=rad_dir,
-                          nexrad_loc_csv =nexrad_loc_csv,
-                          save_dir=save_dir,
-                          savefig=savefig,alterfiles=alterfiles,)
+    ds_images = validate_examples(getattr(INPUT_ARG_OBJECT, LEARNING_EXAMPLE_FILE_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, STORM_IMAGE_DIR_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, LEVEL_TO_PLOT_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, LINKAGE_DIR_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, SEGMOTION_DIR_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, GRIDRAD_DIR_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, NEXRAD_LOC_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, SAVE_DIR_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, SAVEFIG_BOOL_ARG_NAME),
+                                  getattr(INPUT_ARG_OBJECT, ALTER_FILES_BOOL_ARG_NAME),)
