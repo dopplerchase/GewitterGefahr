@@ -453,7 +453,7 @@ ALTER_FILES_BOOL_ARG_NAME = 'alterfiles'
 
 if __name__ == '__main__':
     INPUT_ARG_OBJECT = INPUT_ARG_PARSER.parse_args()
-    ds_images = validate_examples(learning_example_file=getattr(INPUT_ARG_OBJECT, LEARNING_EXAMPLE_FILE_ARG_NAME),
+    ds_images = validate_examples(input_example_filename=getattr(INPUT_ARG_OBJECT, LEARNING_EXAMPLE_FILE_ARG_NAME),
                                   storm_image_dir=getattr(INPUT_ARG_OBJECT, STORM_IMAGE_DIR_ARG_NAME),
                                   level=getattr(INPUT_ARG_OBJECT, LEVEL_TO_PLOT_ARG_NAME),
                                   linkage_dir=getattr(INPUT_ARG_OBJECT, LINKAGE_DIR_ARG_NAME),
