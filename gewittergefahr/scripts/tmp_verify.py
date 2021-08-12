@@ -234,7 +234,10 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
 #             file_str = 'nexrad_3d_v4_2_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
             file_str = 'nexrad_3d_4_1_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
             radar_file = rad_dir + year + '/' + ymd + '/' + file_str
-            gr = gridrad(filename=radar_file,filter=True,toxr=True)
+            #hack to make it work 
+            gr = gridrad()
+            gr.ds = xr.open_dataset(radar_file)
+#             gr = gridrad(filename=radar_file,filter=True,toxr=True)
 
             #subset to just the box around the storm centroid 
             x,y = np.meshgrid(gr.ds.Longitude.values,gr.ds.Latitude.values)
