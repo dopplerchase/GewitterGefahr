@@ -252,7 +252,9 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:i_x+j],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
 
             #extract radar time from file 
-            radar_time = pd.to_datetime(np.asarray(netCDF4.num2date(boxds.time.values[0],'seconds since 2001-01-01 00:00:00'),dtype='str'))
+#             radar_time = pd.to_datetime(np.asarray(netCDF4.num2date(boxds.time.values[0],'seconds since 2001-01-01 00:00:00'),dtype='str'))
+            radar_time = boxds.time.values[0]
+            print(radar_time)
 
             #cut all NEXRAD locs to just ones in the box 
             df_nexrad_adj = df_nexrad.where(df_nexrad.lon >= boxds.Longitude.values.min())
