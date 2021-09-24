@@ -275,12 +275,16 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             closest = gr.ds.sel(Longitude=tracking_storm_time.centroid_longitude_deg.values,Latitude=tracking_storm_time.centroid_latitude_deg.values,method='nearest')
             closest = closest.squeeze()
             i_x,i_y = np.unravel_index(closest.index_mat.values,[gr.ds.Longitude.shape[0],gr.ds.Latitude.shape[0]])
-            print(i_x,i_y)
+
             j = 24 #number of gridpoints in each dir (24 will be 48 total)
+            #check to see if the storm is near the edge of the gridrad domain 
+            if (i_x < 24) or (i_x+24 >  gr.ds.Longitude.shape[0]) or (i_y < 24) or (i_y+j > gr.ds.Latitude.shape[0]):
+                print(i_x,i_y)
+                print('Storm image will be outside the gridrad domain! Skipping this time')
+                continue 
+            
             h = 7 #4 km index 
             boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:i_x+j],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
-            print('Check boxds')
-            print(boxds)
             #extract radar time from file 
 #             radar_time = pd.to_datetime(np.asarray(netCDF4.num2date(boxds.time.values[0],'seconds since 2001-01-01 00:00:00'),dtype='str'))
             radar_time = boxds.time.values[0]
