@@ -306,7 +306,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                     print('WARNING: Near max x_edge and max y_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[i_y-j:-1])
                 else:
-                    rint('WARNING: Near max x_edge of gridrad')
+                    print('WARNING: Near max x_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[i_y-j:-1])
             else:
                 boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:i_x+j],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
