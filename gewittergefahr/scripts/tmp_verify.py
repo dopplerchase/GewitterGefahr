@@ -219,6 +219,9 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             #select just one time from the images & table
             ds_images_sub_storm_time = ds_images_sub_storm.where(ds_images_sub_storm.dtime == time).dropna(dim='storm_object')
             this_storm_time = this_storm.where(this_storm.dtime == time).dropna()
+            
+            print('this_storm_time \n')
+            print(this_storm_time)
 
             #get segmotion tracking to get the storm polygon        
             file_str = 'storm-tracking_segmotion_'+pd.to_datetime(time).strftime("%Y-%m-%d-%H%M%S") + '.p'
@@ -243,13 +246,6 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             tracking_all['dtime'] = dtime_tracking
             tracking_storm = tracking_all.where(tracking_all.full_id_string == storm_string.decode("utf-8")).dropna()
             tracking_storm_time = tracking_storm.where(tracking_storm.dtime == time).dropna()
-            
-            print(tracking_all)
-            print('\n')
-            print(tracking_storm)
-            print('\n')
-            print(tracking_storm_time)
-            print('\n')
             
             #get raw radar (this will add in spatial (lat/lon) info)
             #             file_str = 'nexrad_3d_v4_2_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
@@ -324,7 +320,9 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             
             print(boxds)
             print('\n')
-            print(this_storm_time.tornado_id_strings.values)
+            print(this_tornado_table)
+            print('\n')
+            print(this_tornado_table.tornado_id_string)
             print('\n')
             
             #grab the tornado report info 
