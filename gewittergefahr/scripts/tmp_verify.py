@@ -215,7 +215,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             this_storm_to_events_table,_,this_tornado_table = linkage.read_linkage_file(linkage_dir+year_alter+'/storm_to_tornadoes_'+ymd_alter+'.p')
             this_storm = this_storm_to_events_table.where(this_storm_to_events_table.full_id_string == storm_string.decode("utf-8")).dropna()
             if len(this_storm) == 0:
-               print('still didnt work') 
+               print('CANT FIND STORM ID') 
             
         #get current dtime from storm table 
         dtime_this_storm = pd.to_datetime(np.asarray(netCDF4.num2date(this_storm.valid_time_unix_sec,'seconds since 1970-01-01'),dtype=str))
@@ -274,9 +274,6 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                 #if you use the new gridrad files, use this 
                 #gr = gridrad(filename=radar_file,filter=True,toxr=True)
             
-            print('Check gr.ds \n')
-            print(gr.ds)
-            print('\n')
             #subset to just the box around the storm centroid 
             x,y = np.meshgrid(gr.ds.Longitude.values,gr.ds.Latitude.values)
             index_mat = np.arange(0,gr.ds.Longitude.shape[0]*gr.ds.Latitude.shape[0]).reshape([gr.ds.Longitude.shape[0],gr.ds.Latitude.shape[0]])
@@ -326,19 +323,11 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             df_nexrad_adj = df_nexrad_adj.where(df_nexrad_adj.lat >= boxds.Latitude.values.min())
             df_nexrad_adj = df_nexrad_adj.where(df_nexrad_adj.lat <= boxds.Latitude.values.max())
             
-            print(boxds)
-            print('\n')
-            print(this_tornado_table)
-            print('\n')
-            print(this_tornado_table.tornado_id_string)
-            print('\n')
-            
             #grab the tornado report info 
             this_tornado = this_tornado_table.where(this_tornado_table.tornado_id_string == this_storm_time.tornado_id_strings.values[0][0]).dropna()
             tor_lon = this_tornado.iloc[0].longitude_deg
             tor_lat = this_tornado.iloc[0].latitude_deg
             tor_time = pd.to_datetime(np.asarray(netCDF4.num2date(this_tornado.iloc[0].unix_time_sec,'seconds since 1970-01-01 00:00:00'),dtype='str'))
-
 
             #determine closest NEXRAD to TOR 
             from pyproj import Proj
