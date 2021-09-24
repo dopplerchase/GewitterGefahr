@@ -206,6 +206,12 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
         ds_images_sub_storm = ds_images_sub.where(ds_images_sub.full_storm_id_strings==storm_string).dropna(dim='storm_object')
         #drop all other storm saved data from the table 
         this_storm = this_storm_to_events_table.where(this_storm_to_events_table.full_id_string == storm_string.decode("utf-8")).dropna()
+        
+        print('this_storm_to_events_table \n')
+        print(this_storm_to_events_table)
+        print('this_storm \n')
+        print(this_storm)
+            
         #get current dtime from storm table 
         dtime_this_storm = pd.to_datetime(np.asarray(netCDF4.num2date(this_storm.valid_time_unix_sec,'seconds since 1970-01-01'),dtype=str))
         this_storm['dtime'] = dtime_this_storm
@@ -220,12 +226,6 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             ds_images_sub_storm_time = ds_images_sub_storm.where(ds_images_sub_storm.dtime == time).dropna(dim='storm_object')
             this_storm_time = this_storm.where(this_storm.dtime == time).dropna()
             
-            print('this_storm \n')
-            print(this_storm)
-            print('time \n')
-            print(time)
-            
-
             #get segmotion tracking to get the storm polygon        
             file_str = 'storm-tracking_segmotion_'+pd.to_datetime(time).strftime("%Y-%m-%d-%H%M%S") + '.p'
             tracking_file = seg_dir + year + '/' + ymd + '/scale_314159265m2/' + file_str
