@@ -207,15 +207,15 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
         #drop all other storm saved data from the table 
         this_storm = this_storm_to_events_table.where(this_storm_to_events_table.full_id_string == storm_string.decode("utf-8")).dropna()
         
-        print('looking for this id string \n')
-        print(storm_string.decode("utf-8"))
-        print('\n')
-        print('this_storm_to_events_table.full_id_string \n')
-        for id in this_storm_to_events_table.full_id_string:
-            print(id)
-        print(this_storm_to_events_table)
-        print('this_storm \n')
-        print(this_storm)
+        if len(this_storm) == 0:
+            print('no storm id in the storm event table, looking in the previous date')
+            time_alter = dtime.min() - pd.Timedelta(days=1)
+            ymd_alter = time_alter.strftime("%Y%m%d")
+            year_alter = time_alter.strftime("%Y")
+            this_storm_to_events_table,_,this_tornado_table = linkage.read_linkage_file(linkage_dir+year_alter+'/storm_to_tornadoes_'+ymd_alter+'.p')
+            this_storm = this_storm_to_events_table.where(this_storm_to_events_table.full_id_string == storm_string.decode("utf-8")).dropna()
+            if len(this_storm) == 0:
+               print('still didnt work') 
             
         #get current dtime from storm table 
         dtime_this_storm = pd.to_datetime(np.asarray(netCDF4.num2date(this_storm.valid_time_unix_sec,'seconds since 1970-01-01'),dtype=str))
