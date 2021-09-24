@@ -262,13 +262,16 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                 gr.ds = xr.open_dataset(radar_file)
                 #if you use the new gridrad files, use this 
                 #gr = gridrad(filename=radar_file,filter=True,toxr=True)
-
-
+            
+            print('Check gr.ds \n')
+            print(gr.ds)
+            print('\n')
             #subset to just the box around the storm centroid 
             x,y = np.meshgrid(gr.ds.Longitude.values,gr.ds.Latitude.values)
             index_mat = np.arange(0,gr.ds.Longitude.shape[0]*gr.ds.Latitude.shape[0]).reshape([gr.ds.Longitude.shape[0],gr.ds.Latitude.shape[0]])
             da = xr.DataArray(data=index_mat,dims=['Longitude','Latitude'])
             gr.ds['index_mat'] = da
+            print(tracking_storm_time.centroid_longitude_deg.values,tracking_storm_time.centroid_latitude_deg.values)
             closest = gr.ds.sel(Longitude=tracking_storm_time.centroid_longitude_deg.values,Latitude=tracking_storm_time.centroid_latitude_deg.values,method='nearest')
             closest = closest.squeeze()
             i_x,i_y = np.unravel_index(closest.index_mat.values,[gr.ds.Longitude.shape[0],gr.ds.Latitude.shape[0]])
