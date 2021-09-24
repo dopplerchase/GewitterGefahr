@@ -207,7 +207,12 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
         #drop all other storm saved data from the table 
         this_storm = this_storm_to_events_table.where(this_storm_to_events_table.full_id_string == storm_string.decode("utf-8")).dropna()
         
-        print('this_storm_to_events_table \n')
+        print('looking for this id string \n')
+        print(storm_string.decode("utf-8"))
+        print('\n')
+        print('this_storm_to_events_table.full_id_string \n')
+        for id in this_storm_to_events_table.full_id_string:
+            print(id)
         print(this_storm_to_events_table)
         print('this_storm \n')
         print(this_storm)
