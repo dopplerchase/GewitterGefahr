@@ -287,12 +287,18 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                 elif (i_y + j > gr.ds.Latitude.shape[0]):
                     print('WARNING: Near min x_edge and max y_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[0:i_x+j],Latitude=gr.ds.Latitude[i_y-j:-1])
+                else:
+                    print('WARNING: Near min x_edge of gridrad')
+                    boxds = gr.ds.sel(Longitude=gr.ds.Longitude[0:i_x+j],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
             elif(i_x + j >  gr.ds.Longitude.shape[0]):
                 if (i_y < 24):
                     print('WARNING: Near max x_edge and min y_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[0:i_y+j])
                 elif (i_y + j > gr.ds.Latitude.shape[0]):
                     print('WARNING: Near max x_edge and max y_edge of gridrad')
+                    boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[i_y-j:-1])
+                else:
+                    rint('WARNING: Near max x_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[i_y-j:-1])
             else:
                 boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:i_x+j],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
