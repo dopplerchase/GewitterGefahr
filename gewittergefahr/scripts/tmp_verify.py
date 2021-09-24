@@ -314,7 +314,12 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             df_nexrad_adj = df_nexrad_adj.where(df_nexrad_adj.lon <= boxds.Longitude.values.max())
             df_nexrad_adj = df_nexrad_adj.where(df_nexrad_adj.lat >= boxds.Latitude.values.min())
             df_nexrad_adj = df_nexrad_adj.where(df_nexrad_adj.lat <= boxds.Latitude.values.max())
-
+            
+            print(boxds)
+            print('\n')
+            print(this_storm_time.tornado_id_strings.values)
+            print('\n')
+            
             #grab the tornado report info 
             this_tornado = this_tornado_table.where(this_tornado_table.tornado_id_string == this_storm_time.tornado_id_strings.values[0][0]).dropna()
             tor_lon = this_tornado.iloc[0].longitude_deg
