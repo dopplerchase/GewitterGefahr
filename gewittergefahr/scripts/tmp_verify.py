@@ -229,7 +229,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             try:
                 tracking_all = storm_tracking_io.read_file(tracking_file)
             except OSError as e:
-                print('no file in current dir, looking one dir back')
+                print('no segmotion file in current dir, looking one dir back')
                 #rebuild build date string 
                 time_alter = pd.to_datetime(time) - pd.Timedelta(days=1)
                 ymd_alter = time_alter.strftime("%Y%m%d")
@@ -245,13 +245,24 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             tracking_storm_time = tracking_storm.where(tracking_storm.dtime == time).dropna()
             
             #get raw radar (this will add in spatial (lat/lon) info)
-#             file_str = 'nexrad_3d_v4_2_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
+            #             file_str = 'nexrad_3d_v4_2_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
             file_str = 'nexrad_3d_4_1_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
             radar_file = rad_dir + year + '/' + ymd + '/' + file_str
-            #hack to make it work 
             gr = gridrad()
-            gr.ds = xr.open_dataset(radar_file)
-#             gr = gridrad(filename=radar_file,filter=True,toxr=True)
+            #sometimes the file is stored in the previous days dir, so we need this try/except statment 
+            try:
+                gr.ds = xr.open_dataset(radar_file)
+                #if you use the new gridrad files, use this 
+                #gr = gridrad(filename=radar_file,filter=True,toxr=True)
+            except OSError as e:
+                print('no gridrad file in current dir, looking one dir back')
+                file_str = 'nexrad_3d_4_1_'+pd.to_datetime(time_alter).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
+                radar_file = rad_dir + year_alter + '/' + ymd_alter + '/' + file_str
+                print('newfilename: {}'.format(radar_file))
+                gr.ds = xr.open_dataset(radar_file)
+                #if you use the new gridrad files, use this 
+                #gr = gridrad(filename=radar_file,filter=True,toxr=True)
+
 
             #subset to just the box around the storm centroid 
             x,y = np.meshgrid(gr.ds.Longitude.values,gr.ds.Latitude.values)
