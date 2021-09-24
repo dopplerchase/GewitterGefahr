@@ -220,8 +220,11 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             ds_images_sub_storm_time = ds_images_sub_storm.where(ds_images_sub_storm.dtime == time).dropna(dim='storm_object')
             this_storm_time = this_storm.where(this_storm.dtime == time).dropna()
             
-            print('this_storm_time \n')
-            print(this_storm_time)
+            print('this_storm \n')
+            print(this_storm)
+            print('time \n')
+            print(time)
+            
 
             #get segmotion tracking to get the storm polygon        
             file_str = 'storm-tracking_segmotion_'+pd.to_datetime(time).strftime("%Y-%m-%d-%H%M%S") + '.p'
