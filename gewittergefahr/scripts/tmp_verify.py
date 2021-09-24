@@ -256,7 +256,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                 #gr = gridrad(filename=radar_file,filter=True,toxr=True)
             except OSError as e:
                 print('no gridrad file in current dir, looking one dir back')
-                file_str = 'nexrad_3d_4_1_'+pd.to_datetime(time_alter).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
+                file_str = 'nexrad_3d_4_1_'+pd.to_datetime(time).strftime("%Y%m%dT%H%M%S") + 'Z.nc'
                 radar_file = rad_dir + year_alter + '/' + ymd_alter + '/' + file_str
                 print('newfilename: {}'.format(radar_file))
                 gr.ds = xr.open_dataset(radar_file)
