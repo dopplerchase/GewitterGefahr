@@ -224,7 +224,21 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             file_str = 'storm-tracking_segmotion_'+pd.to_datetime(time).strftime("%Y-%m-%d-%H%M%S") + '.p'
             tracking_file = seg_dir + year + '/' + ymd + '/scale_314159265m2/' + file_str
             from gewittergefahr.gg_io import storm_tracking_io
-            tracking_all = storm_tracking_io.read_file(tracking_file)
+            
+            #sometimes the file is stored in the previous days dir, so we need this try/except statment 
+            try:
+                tracking_all = storm_tracking_io.read_file(tracking_file)
+            except OSError as e:
+                print('no file in current dir, looking one dir back')
+                #rebuild build date string 
+                time_alter = pd.to_datetime(time) - pd.Timedelta(days=1)
+                ymd_alter = time_alter.strftime("%Y%m%d")
+                year_alter = time_alter.strftime("%Y")
+                file_str = 'storm-tracking_segmotion_'+pd.to_datetime(time).strftime("%Y-%m-%d-%H%M%S") + '.p'
+                tracking_file = seg_dir + year + '/' + ymd_alter + '/scale_314159265m2/' + file_str
+                print('newfilename: {}'.format(tracking_file))
+                tracking_all = storm_tracking_io.read_file(tracking_file)
+                
             dtime_tracking = pd.to_datetime(np.asarray(netCDF4.num2date(tracking_all.valid_time_unix_sec,'seconds since 1970-01-01'),dtype=str))
             tracking_all['dtime'] = dtime_tracking
             tracking_storm = tracking_all.where(tracking_all.full_id_string == storm_string.decode("utf-8")).dropna()
