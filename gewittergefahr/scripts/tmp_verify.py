@@ -288,23 +288,25 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             h = 7 #4 km index
             
             print('Original GridRad Domain: Lonmin,Lonmax,Latmin,Latmax \n')
-            print(gr.ds.Longitude.min(),gr.ds.Longitude.max(),gr.ds.Latitude.max(),gr.ds.Latitude.min())
+            print(gr.ds.Longitude.min().values,gr.ds.Longitude.max().values,gr.ds.Latitude.max().values,gr.ds.Latitude.min().values)
+            print('Closest grid index \n')
+            print(i_x,i_y)
             #check to see if the storm is near the edge of the gridrad domain. if they are warn the user
             if (i_x < 24):
                 if (i_y < 24):
-                    print('WARNING: Near min x_edge and min y_edge of gridrad')
+                    print('WARNING: Near min x_edge and min y_edge of gridrad. Defulting to smallest index [i.e., 0]')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[0:i_x+j],Latitude=gr.ds.Latitude[0:i_y+j])
-                elif (i_y + j > gr.ds.Latitude.shape[0]):
+                elif ((i_y + j) > gr.ds.Latitude.shape[0]):
                     print('WARNING: Near min x_edge and max y_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[0:i_x+j],Latitude=gr.ds.Latitude[i_y-j:-1])
                 else:
                     print('WARNING: Near min x_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[0:i_x+j],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
-            elif(i_x + j >  gr.ds.Longitude.shape[0]):
+            elif((i_x + j) >  gr.ds.Longitude.shape[0]):
                 if (i_y < 24):
                     print('WARNING: Near max x_edge and min y_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[0:i_y+j])
-                elif (i_y + j > gr.ds.Latitude.shape[0]):
+                elif ((i_y + j) > gr.ds.Latitude.shape[0]):
                     print('WARNING: Near max x_edge and max y_edge of gridrad')
                     boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[i_y-j:-1])
                 else:
