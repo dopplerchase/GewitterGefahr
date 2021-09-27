@@ -287,11 +287,6 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             j = 24 #number of gridpoints in each dir (24 will be 48 total)
             h = 7 #4 km index
             
-            print('Original GridRad Domain: Lonmin,Lonmax,Latmin,Latmax \n')
-            print(gr.ds.Longitude.min().values,gr.ds.Longitude.max().values,gr.ds.Latitude.max().values,gr.ds.Latitude.min().values)
-            print('Closest grid index \n')
-            print(i_x,i_y)
-            
             #check to see if the storm is near the edge of the gridrad domain. if they are warn the user. Do x index first 
             if (i_x < 24):
                 print('WARNING: Near min x_edge of gridrad. Defulting to smallest index [i.e., 0]')
@@ -490,11 +485,12 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                 ax.text(-0.2,0.1,'Tor Time:{}'.format(tor_time),transform=ax.transAxes,fontsize=18)
                 ax.text(-0.24,0,'Rad Time:{}'.format(pd.to_datetime(radar_time).strftime('%Y-%m-%d %H:%M:%S')),transform=ax.transAxes,fontsize=18)
                 plt.tight_layout()
-                savestr = save_dir + input_example_filename[-26:-3] + '/' + padder2(iter_count) + '.png'
+                savestr = save_dir + 'figs/' + input_example_filename[-26:-3] + '/' + padder2(iter_count) + '.png'
                 plt.savefig(savestr,dpi=300)
                 plt.close()
                 
     if alterfiles:
+        #For now i will just make companion files, rather than append to already exisiting file. 
         da = xr.DataArray(data=time_diff,dims=["storm_object"],attrs=dict(description="difference between tor time and rad time",units="seconds",))
         da = da.where(da != -9999)
         ds_images['time_diff'] = da
@@ -508,11 +504,12 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
         da = da.where(da != -9999)
         ds_images['dist_to_report'] = da
         
-        
-        
-        ds_images = ds_images.drop(['lame_index','dtime'])
-        
-        return ds_images 
+        #need to drop all the copies of data to save disk space. 
+        ds_images = ds_images.drop('full_storm_id_strings','radar_field_names','target_names','storm_times_unix_sec',
+                                   'target_matrix','radar_heights_m_agl','radar_image_matrix','sounding_field_names',
+                                   'sounding_heights_m_agl','sounding_matrix','lame_index','dtime'])
+       
+        ds_images.to_netcdf(save_dir + 'data/' + input_example_filename[-26:-3] + '.nc
 
 LEARNING_EXAMPLE_FILE_ARG_NAME = 'learning_example_file'
 STORM_IMAGE_DIR_ARG_NAME = 'storm_image_dir'
