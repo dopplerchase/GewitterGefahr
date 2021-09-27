@@ -172,21 +172,21 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
     ymd = year+month+day
 
     
-    #load images into memory 
-    ds_vor = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/vorticity_s01/'+level+'/storm_images_'+ymd+'.nc')
-    ds_sw = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/spectrum_width_m_s01/'+level+'/storm_images_'+ymd+'.nc')
-    ds_div = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/divergence_s01/'+level+'/storm_images_'+ymd+'.nc')
-    ds_zdr = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/differential_reflectivity_db/'+level+'/storm_images_'+ymd+'.nc')
-    ds_dbz= xr.open_dataset(storm_image_dir+'gridrad/'+year+'/reflectivity_dbz/'+level+'/storm_images_'+ymd+'.nc')
-    ds_kdp = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/specific_differential_phase_deg_km01/'+level+'/storm_images_'+ymd+'.nc')
-    ds_cor = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/correlation_coefficient/'+level+'/storm_images_'+ymd+'.nc')
+    #Not sure this code is needed
+#     ds_vor = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/vorticity_s01/'+level+'/storm_images_'+ymd+'.nc')
+#     ds_sw = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/spectrum_width_m_s01/'+level+'/storm_images_'+ymd+'.nc')
+#     ds_div = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/divergence_s01/'+level+'/storm_images_'+ymd+'.nc')
+#     ds_zdr = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/differential_reflectivity_db/'+level+'/storm_images_'+ymd+'.nc')
+#     ds_dbz= xr.open_dataset(storm_image_dir+'gridrad/'+year+'/reflectivity_dbz/'+level+'/storm_images_'+ymd+'.nc')
+#     ds_kdp = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/specific_differential_phase_deg_km01/'+level+'/storm_images_'+ymd+'.nc')
+#     ds_cor = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/correlation_coefficient/'+level+'/storm_images_'+ymd+'.nc')
     
     #stack them for easy plotting
-    storm_image_matrix = np.stack([ds_dbz.storm_image_matrix.values,ds_sw.storm_image_matrix.values,ds_vor.storm_image_matrix.values,ds_div.storm_image_matrix.values,ds_zdr.storm_image_matrix.values,ds_kdp.storm_image_matrix.values,ds_cor.storm_image_matrix.values])
-    storm_image_matrix = xr.DataArray(data=storm_image_matrix,dims=['var','storm_object','grid_row','grid_column'])
+#     storm_image_matrix = np.stack([ds_dbz.storm_image_matrix.values,ds_sw.storm_image_matrix.values,ds_vor.storm_image_matrix.values,ds_div.storm_image_matrix.values,ds_zdr.storm_image_matrix.values,ds_kdp.storm_image_matrix.values,ds_cor.storm_image_matrix.values])
+#     storm_image_matrix = xr.DataArray(data=storm_image_matrix,dims=['var','storm_object','grid_row','grid_column'])
     import copy 
-    ds = copy.deepcopy(ds_vor)
-    ds['storm_image_matrix'] = storm_image_matrix
+#     ds = copy.deepcopy(ds_vor)
+#     ds['storm_image_matrix'] = storm_image_matrix
     
     #load tornado linkage file
     from gewittergefahr.gg_utils import linkage
