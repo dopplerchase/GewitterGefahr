@@ -166,10 +166,14 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
         
 
     #build date string 
-    year =padder(dtime.year.min())
-    month = padder(dtime.month.min())
-    day = padder(dtime.day.min())
+    #pick start time
+    s_time = dtime.min()
+    year =padder(s_time.year)
+    month = padder(s_time.month)
+    day = padder(s_time.day)
     ymd = year+month+day
+    print('times \n ')
+    print(ymd,s_time,time_alter.strftime("%Y%m%d"))
 
     
     #Not sure this code is needed
