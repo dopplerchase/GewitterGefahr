@@ -172,25 +172,6 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
     month = padder(s_time.month)
     day = padder(s_time.day)
     ymd = year+month+day
-    print('times \n ')
-    print(ymd,s_time,s_time.strftime("%Y%m%d"))
-
-    
-    #Not sure this code is needed
-#     ds_vor = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/vorticity_s01/'+level+'/storm_images_'+ymd+'.nc')
-#     ds_sw = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/spectrum_width_m_s01/'+level+'/storm_images_'+ymd+'.nc')
-#     ds_div = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/divergence_s01/'+level+'/storm_images_'+ymd+'.nc')
-#     ds_zdr = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/differential_reflectivity_db/'+level+'/storm_images_'+ymd+'.nc')
-#     ds_dbz= xr.open_dataset(storm_image_dir+'gridrad/'+year+'/reflectivity_dbz/'+level+'/storm_images_'+ymd+'.nc')
-#     ds_kdp = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/specific_differential_phase_deg_km01/'+level+'/storm_images_'+ymd+'.nc')
-#     ds_cor = xr.open_dataset(storm_image_dir+'gridrad/'+year+'/correlation_coefficient/'+level+'/storm_images_'+ymd+'.nc')
-    
-    #stack them for easy plotting
-#     storm_image_matrix = np.stack([ds_dbz.storm_image_matrix.values,ds_sw.storm_image_matrix.values,ds_vor.storm_image_matrix.values,ds_div.storm_image_matrix.values,ds_zdr.storm_image_matrix.values,ds_kdp.storm_image_matrix.values,ds_cor.storm_image_matrix.values])
-#     storm_image_matrix = xr.DataArray(data=storm_image_matrix,dims=['var','storm_object','grid_row','grid_column'])
-    import copy 
-#     ds = copy.deepcopy(ds_vor)
-#     ds['storm_image_matrix'] = storm_image_matrix
     
     #load tornado linkage file
     from gewittergefahr.gg_utils import linkage
@@ -293,26 +274,26 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             
             #check to see if the storm is near the edge of the gridrad domain. if they are warn the user. Do x index first 
             if (i_x < 24):
-                print('WARNING: Near min x_edge of gridrad. Defulting to smallest index [i.e., 0]')
+                print('WARNING: Near min x_edge of gridrad. Defulting to smallest index')
                 i_x_min = 0 
                 i_x_max = i_x + j 
             elif ((i_x + j) >  gr.ds.Longitude.shape[0]):
-                print('WARNING: Near max x_edge of gridrad. Defulting to largest index [i.e., -1]')
+                print('WARNING: Near max x_edge of gridrad. Defulting to largest index')
                 i_x_min = i_x - j 
-                i_x_max = -1 
+                i_x_max = gr.ds.Longitude.shape[0] 
             else:
                 i_x_min = i_x - j 
                 i_x_max = i_x + j 
              
             #check to see if the storm is near the edge of the gridrad domain. if they are warn the user. Do y index
             if (i_y < 24):
-                print('WARNING: Near min y_edge of gridrad. Defulting to smallest index [i.e., 0]')
+                print('WARNING: Near min y_edge of gridrad. Defulting to smallest index')
                 i_y_min = 0 
                 i_y_max = i_y + j 
             elif ((i_y + j) > gr.ds.Latitude.shape[0]):
-                print('WARNING: Near max y_edge of gridrad. Defulting to largest index [i.e., -1]')
+                print('WARNING: Near max y_edge of gridrad. Defulting to largest index')
                 i_y_min = i_y + j 
-                i_y_max = -1
+                i_y_max = gr.ds.Latitude.shape[0]
             else:
                 i_y_min = i_y - j 
                 i_y_max = i_y + j 
