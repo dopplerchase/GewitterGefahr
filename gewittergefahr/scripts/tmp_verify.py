@@ -291,29 +291,34 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             print(gr.ds.Longitude.min().values,gr.ds.Longitude.max().values,gr.ds.Latitude.max().values,gr.ds.Latitude.min().values)
             print('Closest grid index \n')
             print(i_x,i_y)
-            #check to see if the storm is near the edge of the gridrad domain. if they are warn the user
+            
+            #check to see if the storm is near the edge of the gridrad domain. if they are warn the user. Do x index first 
             if (i_x < 24):
-                if (i_y < 24):
-                    print('WARNING: Near min x_edge and min y_edge of gridrad. Defulting to smallest index [i.e., 0]')
-                    boxds = gr.ds.sel(Longitude=gr.ds.Longitude[0:i_x+j],Latitude=gr.ds.Latitude[0:i_y+j])
-                elif ((i_y + j) > gr.ds.Latitude.shape[0]):
-                    print('WARNING: Near min x_edge and max y_edge of gridrad')
-                    boxds = gr.ds.sel(Longitude=gr.ds.Longitude[0:i_x+j],Latitude=gr.ds.Latitude[i_y-j:-1])
-                else:
-                    print('WARNING: Near min x_edge of gridrad')
-                    boxds = gr.ds.sel(Longitude=gr.ds.Longitude[0:i_x+j],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
-            elif((i_x + j) >  gr.ds.Longitude.shape[0]):
-                if (i_y < 24):
-                    print('WARNING: Near max x_edge and min y_edge of gridrad')
-                    boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[0:i_y+j])
-                elif ((i_y + j) > gr.ds.Latitude.shape[0]):
-                    print('WARNING: Near max x_edge and max y_edge of gridrad')
-                    boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[i_y-j:-1])
-                else:
-                    print('WARNING: Near max x_edge of gridrad')
-                    boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:-1],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
+                print('WARNING: Near min x_edge of gridrad. Defulting to smallest index [i.e., 0]')
+                i_x_min = 0 
+                i_x_max = i_x + j 
+            elif ((i_x + j) >  gr.ds.Longitude.shape[0]):
+                print('WARNING: Near max x_edge of gridrad. Defulting to largest index [i.e., -1]')
+                i_x_min = i_x - j 
+                i_x_max = -1 
             else:
-                boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x-j:i_x+j],Latitude=gr.ds.Latitude[i_y-j:i_y+j])
+                i_x_min = i_x - j 
+                i_x_max = i_x + j 
+             
+            #check to see if the storm is near the edge of the gridrad domain. if they are warn the user. Do y index
+            if (i_y < 24):
+                print('WARNING: Near min y_edge of gridrad. Defulting to smallest index [i.e., 0]')
+                i_y_min = 0 
+                i_y_max = i_y + j 
+            elif ((i_y + j) > gr.ds.Latitude.shape[0]):
+                print('WARNING: Near max y_edge of gridrad. Defulting to largest index [i.e., -1]')
+                i_y_min = i_y + j 
+                i_y_max = -1
+            else:
+                i_y_min = i_y - j 
+                i_y_max = i_y + j 
+                 
+            boxds = gr.ds.sel(Longitude=gr.ds.Longitude[i_x_min:i_x_max],Latitude=gr.ds.Latitude[i_y_min:i_y_max])
 
             
             #extract radar time from file 
