@@ -287,6 +287,8 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             j = 24 #number of gridpoints in each dir (24 will be 48 total)
             h = 7 #4 km index
             
+            print('Original GridRad Domain: Lonmin,Lonmax,Latmin,Latmax \n')
+            print(gr.ds.Longitude.min(),gr.ds.Longitude.max(),gr.ds.Latitude.max(),gr.ds.Latitude.min())
             #check to see if the storm is near the edge of the gridrad domain. if they are warn the user
             if (i_x < 24):
                 if (i_y < 24):
