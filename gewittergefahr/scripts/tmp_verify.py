@@ -509,7 +509,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                                    'target_matrix','radar_heights_m_agl','radar_image_matrix','sounding_field_names',
                                    'sounding_heights_m_agl','sounding_matrix','lame_index','dtime'])
        
-        ds_images.to_netcdf(save_dir + 'data/' + input_example_filename[-26:-3] + '.nc
+        ds_images.to_netcdf(save_dir + 'data/' + input_example_filename[-26:-3] + '.nc'
 
 LEARNING_EXAMPLE_FILE_ARG_NAME = 'learning_example_file'
 STORM_IMAGE_DIR_ARG_NAME = 'storm_image_dir'
