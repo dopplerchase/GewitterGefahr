@@ -285,7 +285,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             i_x,i_y = np.unravel_index(closest.index_mat.values,[gr.ds.Longitude.shape[0],gr.ds.Latitude.shape[0]])
 
             j = 24 #number of gridpoints in each dir (24 will be 48 total)
-            h = 7 #4 km index
+            h = 3 #4 km index
             
             #check to see if the storm is near the edge of the gridrad domain. if they are warn the user. Do x index first 
             if (i_x < 24):
