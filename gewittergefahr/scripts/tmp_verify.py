@@ -372,7 +372,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
             
             if savefig:
                 from pathlib import Path
-                Path(save_dir + input_example_filename[-26:-3] + '/').mkdir(parents=True, exist_ok=True)
+                Path(save_dir + 'figs/' + input_example_filename[-26:-3] + '/').mkdir(parents=True, exist_ok=True)
                 #plot it up 
                 fig,axes = plt.subplots(2,4,figsize=(15,7.5))
 
