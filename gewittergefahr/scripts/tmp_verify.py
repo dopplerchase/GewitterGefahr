@@ -173,7 +173,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
     day = padder(s_time.day)
     ymd = year+month+day
     print('times \n ')
-    print(ymd,s_time,time_alter.strftime("%Y%m%d"))
+    print(ymd,s_time,s_time.strftime("%Y%m%d"))
 
     
     #Not sure this code is needed
