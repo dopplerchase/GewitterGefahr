@@ -271,10 +271,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
 
             j = 24 #number of gridpoints in each dir (24 will be 48 total)
             h = 3 #4 km index
-            print('lon lat grid \n')
-            print(gr.ds.Longitude.min().values,gr.ds.Longitude.max().values,gr.ds.Latitude.min().values,gr.ds.Latitude.max().values)
-            print('indices \n')
-            print(i_x,i_y,gr.ds.Longitude.shape[0],gr.ds.Latitude.shape[0])
+            
             #check to see if the storm is near the edge of the gridrad domain. if they are warn the user. Do x index first 
             if (i_x < 24):
                 print('WARNING: Near min x_edge of gridrad. Defulting to smallest index')
@@ -295,7 +292,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
                 i_y_max = i_y + j 
             elif ((i_y + j) > gr.ds.Latitude.shape[0]):
                 print('WARNING: Near max y_edge of gridrad. Defulting to largest index')
-                i_y_min = i_y + j 
+                i_y_min = i_y - j 
                 i_y_max = gr.ds.Latitude.shape[0]
             else:
                 i_y_min = i_y - j 
