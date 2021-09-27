@@ -505,7 +505,7 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
         ds_images['dist_to_report'] = da
         
         #need to drop all the copies of data to save disk space. 
-        ds_images = ds_images.drop('full_storm_id_strings','radar_field_names','target_names','storm_times_unix_sec',
+        ds_images = ds_images.drop(['full_storm_id_strings','radar_field_names','target_names','storm_times_unix_sec',
                                    'target_matrix','radar_heights_m_agl','radar_image_matrix','sounding_field_names',
                                    'sounding_heights_m_agl','sounding_matrix','lame_index','dtime'])
        
