@@ -175,7 +175,20 @@ def validate_examples(input_example_filename,storm_image_dir,level,linkage_dir,s
     
     #load tornado linkage file
     from gewittergefahr.gg_utils import linkage
-    this_storm_to_events_table,_,this_tornado_table = linkage.read_linkage_file(linkage_dir+year+'/storm_to_tornadoes_'+ymd+'.p')
+    #sometimes the file is stored in the previous days dir, so we need this try/except statment 
+    try:
+        this_storm_to_events_table,_,this_tornado_table = linkage.read_linkage_file(linkage_dir+year+'/storm_to_tornadoes_'+ymd+'.p')
+    except OSError as e:
+        print('no storm/tornado file in the current day, looking one day back')
+        #rebuild build date string 
+        time_alter = pd.to_datetime(s_time) - pd.Timedelta(days=1)
+        ymd_alter = time_alter.strftime("%Y%m%d")
+        year_alter = time_alter.strftime("%Y")
+        file_str = '/storm_to_tornadoes_'+ymd_alter+'.p'
+        storm_to_events_table_file = linkage_dir + year_alter + file_str
+        print('newfilename: {}'.format(storm_to_events_table_file))
+        this_storm_to_events_table,_,this_tornado_table = linkage.read_linkage_file(storm_to_events_table_file)
+    
     
     #subset the images to just where the label is 1 (i.e., there was a tornado from LSR)
     #note the target label is currently hard coded. 
