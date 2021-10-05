@@ -167,17 +167,24 @@ def _run_for_gridrad(
     :param option_dict: See doc for
         `echo_classification.find_convective_pixels`.
     """
-
+    
+    print('AT THE START')
+    
     valid_times_unix_sec = time_periods.range_and_interval_to_list(
         start_time_unix_sec=time_conversion.get_start_of_spc_date(
             spc_date_string),
         end_time_unix_sec=time_conversion.get_end_of_spc_date(
             spc_date_string),
         time_interval_sec=TIME_INTERVAL_SEC, include_endpoint=True)
-
+    print('valid_times \n')
+    print(valid_times_unix_sec)
+    print('\n')
+    
     num_times = len(valid_times_unix_sec)
     radar_file_names = [''] * num_times
     indices_to_keep = []
+    
+    print('RIGHT BEFORE THE 1st LOOP')
 
     for i in tqdm(range(num_times)):
         radar_file_names[i] = gridrad_io.find_file(
@@ -188,11 +195,19 @@ def _run_for_gridrad(
         if os.path.isfile(radar_file_names[i]):
             indices_to_keep.append(i)
     
+    print('RIGHT AFTER  1st LOOP')
+    
     indices_to_keep = numpy.array(indices_to_keep, dtype=int)
     valid_times_unix_sec = valid_times_unix_sec[indices_to_keep]
     radar_file_names = [radar_file_names[k] for k in indices_to_keep]
     num_times = len(valid_times_unix_sec)
-
+    
+    print('RIGHT BEFORE THE 2nd LOOP')
+    
+    print('radar_file_names \n')
+    print(radar_file_names)
+    print('\n')
+    
     for i in tqdm(range(num_times)):
         print('Reading data from: "{0:s}"...\n'.format(radar_file_names[i]))
         radar_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
