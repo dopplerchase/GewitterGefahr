@@ -182,13 +182,11 @@ def find_file(unix_time_sec, top_directory_name, raise_error_if_missing=True,new
     spc_date_string = time_conversion.time_to_spc_date_string(unix_time_sec)
     #Added bool to allow for processing of new and old gridrad files. On 10 Aug 2021 by RJC
     if new_version:
-        print('in new version')
         gridrad_file_name = '{0:s}/{1:s}/{2:s}/{3:s}'.format(
             top_directory_name, spc_date_string[:4], spc_date_string,
             _get_pathless_file_name2(unix_time_sec)
         )
     else:
-        print('in old version')
         gridrad_file_name = '{0:s}/{1:s}/{2:s}/{3:s}'.format(
             top_directory_name, spc_date_string[:4], spc_date_string,
             _get_pathless_file_name(unix_time_sec)
