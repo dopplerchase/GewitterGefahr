@@ -190,7 +190,7 @@ def _run_for_gridrad(
         radar_file_names[i] = gridrad_io.find_file(
             top_directory_name=top_radar_dir_name,
             unix_time_sec=valid_times_unix_sec[i],
-            raise_error_if_missing=False)
+            raise_error_if_missing=False,new_version=True)
         print(radar_file_names[i])
         if os.path.isfile(radar_file_names[i]):
             indices_to_keep.append(i)
