@@ -163,7 +163,7 @@ def file_name_to_time(gridrad_file_name):
         time_string, TIME_FORMAT_IN_FILE_NAMES)
 
 
-def find_file(unix_time_sec, top_directory_name, raise_error_if_missing=True,new_version=False):
+def find_file(unix_time_sec, top_directory_name, raise_error_if_missing=True,new_version=True):
     """Finds GridRad file on local machine.
 
     Each GridRad file contains all fields at all heights for one valid time.
