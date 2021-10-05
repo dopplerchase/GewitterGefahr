@@ -184,10 +184,10 @@ def _run_for_gridrad(
             top_directory_name=top_radar_dir_name,
             unix_time_sec=valid_times_unix_sec[i],
             raise_error_if_missing=False)
-
+        print(radar_file_names[i])
         if os.path.isfile(radar_file_names[i]):
             indices_to_keep.append(i)
-
+    
     indices_to_keep = numpy.array(indices_to_keep, dtype=int)
     valid_times_unix_sec = valid_times_unix_sec[indices_to_keep]
     radar_file_names = [radar_file_names[k] for k in indices_to_keep]
