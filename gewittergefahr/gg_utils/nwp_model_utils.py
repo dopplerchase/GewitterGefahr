@@ -327,7 +327,8 @@ def get_online_directories(model_name, grid_name=None):
             #updated urls (RJC 03/30/21)
             #update to my update. THREDDS is unstable. (RJC 10/18/21) 
             return ['https://www.ncei.noaa.gov/data/rapid-refresh/access/historical/analysis/']
-        return ['https://www.ncei.noaa.gov/thredds/fileServer/model-rap252anl-old']
+        #note, both grids are now stored in the same dir (RJC 10/18/21)
+        return ['https://www.ncei.noaa.gov/data/rapid-refresh/access/historical/analysis/']
 
     if model_name == RUC_MODEL_NAME:
         if grid_name == NAME_OF_130GRID:
