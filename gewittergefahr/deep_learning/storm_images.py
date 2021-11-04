@@ -22,6 +22,7 @@ from gewittergefahr.gg_utils import projections
 from gewittergefahr.gg_utils import geodetic_utils
 from gewittergefahr.gg_utils import file_system_utils
 from gewittergefahr.gg_utils import error_checking
+import tqdm 
 
 SEPARATOR_STRING = '\n\n' + '*' * 50 + '\n\n'
 
@@ -1546,7 +1547,7 @@ def extract_storm_images_gridrad(
     latitude_spacing_deg = None
     longitude_spacing_deg = None
 
-    for i in range(num_times):
+    for i in tqdm.tqdm(range(num_times)):
         this_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
             radar_file_names[i]
         )
