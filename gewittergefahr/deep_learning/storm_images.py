@@ -1549,12 +1549,12 @@ def extract_storm_images_gridrad(
     
     #this is VERY slow to loop over all times with one lonely CPU. 
     #RJC implemented a split proccedure 
-    files_per_split = floor(num_times/n_splits) 
-    left_bounds = np.arange(0,num_times,files_per_split,dtype=int)[:-1]
-    right_bounds = np.arange(0,num_times,files_per_split,dtype=int)[1:]
+    files_per_split = numpy.floor(num_times/n_splits) 
+    left_bounds = numpy.arange(0,num_times,files_per_split,dtype=int)[:-1]
+    right_bounds = numpy.arange(0,num_times,files_per_split,dtype=int)[1:]
     right_bounds[-1] = -1
     #slice total files.. 
-    all_idx = np.arange(num_times+1,dtype=int)
+    all_idx = numpy.arange(num_times+1,dtype=int)
     these_idx = all_idx[left_bounds[current_split]:right_bounds[current_split]]
 
     for i in tqdm.tqdm(these_idx):
