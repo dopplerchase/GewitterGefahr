@@ -186,7 +186,7 @@ def _extract_storm_images(
         rotated_grid_spacing_metres, radar_field_names, radar_heights_m_agl,
         spc_date_string, top_radar_dir_name, top_tracking_dir_name,
         elevation_dir_name, tracking_scale_metres2, target_name,
-        top_target_dir_name, top_output_dir_name,new_gridrad_version):
+        top_target_dir_name, top_output_dir_name,new_gridrad_version,n_splits,current_split):
     """Extracts storm-centered radar images from GridRad data.
 
     :param num_image_rows: See documentation at top of file.
