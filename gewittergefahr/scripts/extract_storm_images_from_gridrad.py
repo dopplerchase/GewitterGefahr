@@ -25,7 +25,7 @@ TARGET_NAME_ARG_NAME = 'target_name'
 TARGET_DIR_ARG_NAME = 'input_target_dir_name'
 OUTPUT_DIR_ARG_NAME = 'output_dir_name'
 NEW_VERSION_ARG_NAME = 'new_gridrad_version'
-N_SPLITS_AGR_NAME = 'n_splits'
+N_SPLITS_ARG_NAME = 'n_splits'
 CURRENT_SPLIT_ARG_NAME = 'current_split'
 
 NUM_ROWS_HELP_STRING = (
