@@ -25,6 +25,8 @@ TARGET_NAME_ARG_NAME = 'target_name'
 TARGET_DIR_ARG_NAME = 'input_target_dir_name'
 OUTPUT_DIR_ARG_NAME = 'output_dir_name'
 NEW_VERSION_ARG_NAME = 'new_gridrad_version'
+N_SPLITS_AGR_NAME = 'n_splits'
+CURRENT_SPLIT_ARG_NAME = 'current_split'
 
 NUM_ROWS_HELP_STRING = (
     'Number of pixel rows in each storm-centered radar image.')
@@ -94,6 +96,13 @@ NEW_VERSION_HELP_STRING = (
 OUTPUT_DIR_HELP_STRING = (
     'Name of top-level directory for storm-centered radar images.')
 
+N_SPLITS_HELP_STRING = (
+    'the number of parallel jobs submitted from sbatch')
+
+CURRENT_SPLIT_HELP_STRING = (
+    'the int. for the current job to determine which files to process')
+
+
 DEFAULT_RADAR_DIR_NAME = '/condo/swatcommon/common/gridrad_final/native_format'
 DEFAULT_ELEVATION_DIR_NAME = '/condo/swatwork/ralager/elevation'
 
@@ -162,6 +171,14 @@ INPUT_ARG_PARSER.add_argument(
 INPUT_ARG_PARSER.add_argument(
     '--' + NEW_VERSION_ARG_NAME, type=bool, required=False,default=False,
     help=NEW_VERSION_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + N_SPLITS_ARG_NAME, type=int, required=True,default=4,
+    help=N_SPLITS_HELP_STRING)
+
+INPUT_ARG_PARSER.add_argument(
+    '--' + CURRENT_SPLIT_ARG_NAME, type=int, required=True,default=0,
+    help=CURRENT_SPLIT_HELP_STRING)
 
 
 def _extract_storm_images(
@@ -257,7 +274,9 @@ def _extract_storm_images(
         rotated_grid_spacing_metres=rotated_grid_spacing_metres,
         radar_field_names=radar_field_names,
         radar_heights_m_agl=radar_heights_m_agl,
-        new_version=new_gridrad_version)
+        new_version=new_gridrad_version,
+        n_splits=n_splits,
+        current_split=current_split)
 
 
 if __name__ == '__main__':
@@ -281,5 +300,7 @@ if __name__ == '__main__':
         target_name=getattr(INPUT_ARG_OBJECT, TARGET_NAME_ARG_NAME),
         top_target_dir_name=getattr(INPUT_ARG_OBJECT, TARGET_DIR_ARG_NAME),
         top_output_dir_name=getattr(INPUT_ARG_OBJECT, OUTPUT_DIR_ARG_NAME),
-        new_gridrad_version=getattr(INPUT_ARG_OBJECT, NEW_VERSION_ARG_NAME)
+        new_gridrad_version=getattr(INPUT_ARG_OBJECT, NEW_VERSION_ARG_NAME),
+        n_splits=getattr(INPUT_ARG_OBJECT, N_SPLITS_ARG_NAME),
+        current_split=getattr(INPUT_ARG_OBJECT, CURRENT_SPLIT_ARG_NAME)
     )
