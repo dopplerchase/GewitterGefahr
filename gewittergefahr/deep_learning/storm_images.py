@@ -1556,6 +1556,8 @@ def extract_storm_images_gridrad(
     #slice total files.. 
     all_idx = numpy.arange(num_times+1,dtype=int)
     these_idx = all_idx[left_bounds[current_split]:right_bounds[current_split]]
+    #hard code hack for the one that didnt finish 
+    these_idx = these_idx[22:-1]
 
     for i in tqdm.tqdm(these_idx):
         this_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
