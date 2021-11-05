@@ -1549,7 +1549,7 @@ def extract_storm_images_gridrad(
     
     #this is VERY slow to loop over all times with one lonely CPU. 
     #RJC implemented a split proccedure 
-    files_per_split = floor(num_times/num_splits) 
+    files_per_split = floor(num_times/n_splits) 
     left_bounds = np.arange(0,num_times,files_per_split,dtype=int)[:-1]
     right_bounds = np.arange(0,num_times,files_per_split,dtype=int)[1:]
     right_bounds[-1] = -1
