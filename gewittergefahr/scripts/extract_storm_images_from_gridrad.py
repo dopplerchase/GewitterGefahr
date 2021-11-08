@@ -185,7 +185,7 @@ INPUT_ARG_PARSER.add_argument(
     help=CURRENT_SPLIT_HELP_STRING)
 
 INPUT_ARG_PARSER.add_argument(
-    '--' + RANDOM_SPLIT_ARG_NAME, type=bool, required=True,default=True,
+    '--' + RADNDOM_SPLIT_ARG_NAME, type=bool, required=True,default=True,
     help=RANDOM_SPLIT_HELP_STRING)
 
 
