@@ -23,6 +23,7 @@ from gewittergefahr.gg_utils import geodetic_utils
 from gewittergefahr.gg_utils import file_system_utils
 from gewittergefahr.gg_utils import error_checking
 import tqdm 
+import xarray as xr
 
 SEPARATOR_STRING = '\n\n' + '*' * 50 + '\n\n'
 
