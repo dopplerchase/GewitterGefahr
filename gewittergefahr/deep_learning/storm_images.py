@@ -1552,7 +1552,7 @@ def extract_storm_images_gridrad(
     #RJC implemented two split proccedures
     if random_split:
         #random splits
-        ds = xr.open_dataset('/scratch/randychase/SPLITS.nc')
+        ds = xr.open_dataset('/scratch/randychase/SPLITS.nc',engine='netcdf4')
         these_idx = ds['split_' + str(current_split)].values 
     else:
         #serial splits
