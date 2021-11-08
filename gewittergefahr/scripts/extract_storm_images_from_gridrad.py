@@ -27,7 +27,7 @@ OUTPUT_DIR_ARG_NAME = 'output_dir_name'
 NEW_VERSION_ARG_NAME = 'new_gridrad_version'
 N_SPLITS_ARG_NAME = 'n_splits'
 CURRENT_SPLIT_ARG_NAME = 'current_split'
-RADNDOM_SPLIT_ARG_NAME = 'random_split'
+RANDOM_SPLIT_ARG_NAME = 'random_split'
 
 NUM_ROWS_HELP_STRING = (
     'Number of pixel rows in each storm-centered radar image.')
@@ -185,7 +185,7 @@ INPUT_ARG_PARSER.add_argument(
     help=CURRENT_SPLIT_HELP_STRING)
 
 INPUT_ARG_PARSER.add_argument(
-    '--' + RADNDOM_SPLIT_ARG_NAME, type=bool, required=True,default=True,
+    '--' + RANDOM_SPLIT_ARG_NAME, type=bool, required=True,default=True,
     help=RANDOM_SPLIT_HELP_STRING)
 
 
