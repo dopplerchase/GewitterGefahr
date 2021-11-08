@@ -1477,7 +1477,7 @@ def extract_storm_images_gridrad(
         rotated_grid_spacing_metres=DEFAULT_ROTATED_GRID_SPACING_METRES,
         radar_field_names=DEFAULT_GRIDRAD_FIELD_NAMES,
         radar_heights_m_agl=DEFAULT_RADAR_HEIGHTS_M_AGL,
-        new_version=False,n_splits=4,current_split=0):
+        new_version=False,n_splits=4,current_split=0,random_split=True):
     """Extracts storm-centered image for each field, height, and storm object.
 
     L = number of storm objects
@@ -1548,14 +1548,20 @@ def extract_storm_images_gridrad(
     longitude_spacing_deg = None
     
     #this is VERY slow to loop over all times with one lonely CPU. 
-    #RJC implemented a split proccedure 
-    files_per_split = numpy.floor(num_times/n_splits) 
-    left_bounds = numpy.arange(0,num_times,files_per_split,dtype=int)[:-1]
-    right_bounds = numpy.arange(0,num_times,files_per_split,dtype=int)[1:]
-    right_bounds[-1] = -1
-    #slice total files.. 
-    all_idx = numpy.arange(num_times+1,dtype=int)
-    these_idx = all_idx[left_bounds[current_split]:right_bounds[current_split]]
+    #RJC implemented two split proccedures
+    if random_split:
+        #random splits
+        ds = xr.open_dataset('/scratch/randychase/SPLITS.nc')
+        these_idx = ds['split_' + str(current_split)].values 
+    else:
+        #serial splits
+        files_per_split = numpy.floor(num_times/n_splits) 
+        left_bounds = numpy.arange(0,num_times,files_per_split,dtype=int)[:-1]
+        right_bounds = numpy.arange(0,num_times,files_per_split,dtype=int)[1:]
+        right_bounds[-1] = -1
+        #slice total files.. 
+        all_idx = numpy.arange(num_times+1,dtype=int)
+        these_idx = all_idx[left_bounds[current_split]:right_bounds[current_split]]
 
     for i in tqdm.tqdm(these_idx):
         this_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
