@@ -66,7 +66,7 @@ def _determine_splits(spc_date,input_directory_name,n_splits):
     
     da_list = []
     big = np.array([],dtype=int)
-    for i in np.arange(0,4):
+    for i in np.arange(0,n_splits):
         name = 'split_' + str(i)
         dim = ['dim_' + str(i)]
         da_list.append(xr.DataArray(split_dict[i],name=name,dims=dim))
@@ -79,7 +79,9 @@ def _determine_splits(spc_date,input_directory_name,n_splits):
         
     ds = xr.merge(da_list)
     
-    ds.to_netcdf('/scratch/randychase/SPLITS.nc')
+    #save n_split many versions, because of permission issues 
+    for i in np.arange(0,n_splits):
+        ds.to_netcdf('/scratch/randychase/SPLITS_{}.nc'.format(i))
     
          
     return 
