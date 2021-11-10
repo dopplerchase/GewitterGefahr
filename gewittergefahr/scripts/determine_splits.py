@@ -38,10 +38,12 @@ def _determine_splits(spc_date,input_directory_name,n_splits):
     tracking_files.sort()
     
     #count number of storms in each time period 
-    n_storms = np.zeros(len(tracking_files),dtype=int)
+    n_storms = np.zeros(len(tracking_files),dtype=np.int)
+    time = np.zeros(len(tracking_files),dtype=np.int64)
     for i,tracking_file in enumerate(tracking_files):
         df = storm_tracking_io.read_file(tracking_file)
         n_storms[i] = len(df)
+        time[i] = pd.to_datetime(tracking_file[-19:-2]).value/1e9
          
     ratio = n_storms/n_storms.sum()
     indices = np.arange(0,len(tracking_files))
@@ -49,26 +51,32 @@ def _determine_splits(spc_date,input_directory_name,n_splits):
     thresh = 1/n_splits 
 
     split_dict = {}
+    time_dict = {}
     total_it = 0
     for n in np.arange(0,n_splits):
         in_thresh = 0
         in_list = []
+        in_list2 = []
         while (in_thresh <= thresh):
             if (total_it > len(tracking_files)) or (len(indices)==0):
                 break
             idx = np.random.choice(indices,replace=False,size=1)
             in_list.append(idx[0])
+            in_list2.append(time[idx[0]])
             in_thresh += ratio[idx]
             indices.remove(idx[0])
             total_it += 1
-        split_dict[n] = np.asarray(in_list)
+        split_dict[n] = np.asarray(in_list,dtype=np.int)
+        time_dict[n] = np.asarray(in_list2,dtype=np.int64)
         
     
     da_list = []
     big = np.array([],dtype=int)
     for i in np.arange(0,n_splits):
         name = 'split_' + str(i)
+        name2 = 'time_' + str(i)
         dim = ['dim_' + str(i)]
+        da_list.append(xr.DataArray(time_dict[i],name=name2,dims=dim))
         da_list.append(xr.DataArray(split_dict[i],name=name,dims=dim))
         big = np.append(big,split_dict[i])
         
