@@ -1558,6 +1558,7 @@ def extract_storm_images_gridrad(
         drop_times = numpy.setxor1d(these_times,valid_times_unix_sec)
         if len(drop_times) > 0:
             for t in drop_times:
+                print(t)
                 ds = ds.where(ds['time_' + str(current_split)] != t).dropna(dim=['dim_' + str(current_split)])
             these_idx = ds['split_' + str(current_split)].values
     else:
