@@ -1549,18 +1549,11 @@ def extract_storm_images_gridrad(
     longitude_spacing_deg = None
     
     #this is VERY slow to loop over all times with one lonely CPU. 
-    #RJC implemented two split proccedures
+    #RJC implemented two split proccedures (11/11/21)
     if random_split:
         #random splits
         ds = xr.open_dataset('/scratch/randychase/SPLITS_{}.nc'.format(current_split),engine='netcdf4')
-        these_times = ds['time_' + str(current_split)].values
-        #need to see which times are missing from valid_times_unix_sec
-        drop_times = numpy.setxor1d(these_times,valid_times_unix_sec)
-        if len(drop_times) > 0:
-            for t in drop_times:
-                print(t)
-                ds = ds.where(ds['time_' + str(current_split)] != t).dropna(dim='dim_' + str(current_split))
-            these_idx = ds['split_' + str(current_split)].values
+        these_idx = ds['split_' + str(current_split)].values
     else:
         #serial splits
         files_per_split = numpy.floor(num_times/n_splits) 
