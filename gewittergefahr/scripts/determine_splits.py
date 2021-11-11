@@ -53,7 +53,7 @@ def _determine_splits(spc_date,input_directory_name,n_splits):
 
     #use the same method as extract_images 
     storm_object_table = storm_tracking_io.read_many_files(tracking_files)
-    valid_times_unix_sec = np.unique(storm_object_table[tracking_utils.VALID_TIME_COLUMN].values
+    valid_times_unix_sec = np.unique(storm_object_table[tracking_utils.VALID_TIME_COLUMN].values)
 
     #find out what times wee need to drop
     drop_times = np.setxor1d(time,valid_times_unix_sec)
