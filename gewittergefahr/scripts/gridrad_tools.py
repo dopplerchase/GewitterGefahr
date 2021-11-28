@@ -1,4 +1,5 @@
 import time 
+import gc 
 
 class gridrad:
     """
@@ -318,6 +319,8 @@ class gridrad:
 
         # Close netCDF4 file
         id.close()
+        del id 
+        gc.collect()
         
         #store data dict. in the class obj 
         self.data =  {'name'                    : 'GridRad analysis for ' + Analysis_time, \
@@ -349,8 +352,14 @@ class gridrad:
         import copy 
         if self.filter_flag == 0:
             data0 = copy.deepcopy(self.data)
+            #del copy of data to clear out RAM 
+            del self.data 
+            gc.collect()
         elif self.filter_flag > 0:
             data0 = copy.deepcopy(self.data_filt)
+            #del copy of data to clear out RAM 
+            del self.data_filt 
+            gc.collect()
             
         # Import python libraries
         import sys
@@ -407,6 +416,11 @@ class gridrad:
         if (nnan > 0): ((data0['Z_H'])['values'])[inan] = float('nan')
 
         self.data_filt = copy.deepcopy(data0)
+        
+        #clear out some RAM 
+        del data0 
+        gc.collect()
+        
         self.filter_flag = 1 
 
     def remove_clutter(self,skip_weak_ll_echo=0):
@@ -414,8 +428,14 @@ class gridrad:
         import copy 
         if self.filter_flag == 0:
             data0 = copy.deepcopy(self.data)
+            #del copy of data to clear out RAM 
+            del self.data 
+            gc.collect()
         elif self.filter_flag > 0:
             data0 = copy.deepcopy(self.data_filt)
+            #del copy of data to clear out RAM 
+            del self.data_filt 
+            gc.collect()
             
         # Import python libraries
         import sys
@@ -590,6 +610,9 @@ class gridrad:
                 ((data0['r_HV'])['values'])[ibad] = float('nan')
 
         self.data_filt = copy.deepcopy(data0)
+        #del data0 to free up RAM 
+        del data0
+        gc.collect()
         self.filter_flag = 2 
         
     def to_xarray(self, key_list_in = ['Z_H','Z_DR','K_DP','r_HV','AzShr','Div','SW'],
