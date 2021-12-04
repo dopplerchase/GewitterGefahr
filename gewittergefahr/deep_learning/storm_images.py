@@ -24,6 +24,7 @@ from gewittergefahr.gg_utils import file_system_utils
 from gewittergefahr.gg_utils import error_checking
 import tqdm 
 import xarray as xr
+import pandas as pd 
 
 SEPARATOR_STRING = '\n\n' + '*' * 50 + '\n\n'
 
@@ -1551,8 +1552,11 @@ def extract_storm_images_gridrad(
     #this is VERY slow to loop over all times with one lonely CPU. 
     #RJC implemented two split proccedures (11/11/21)
     if random_split:
+        #get the current date string 
+        dtime = pd.to_datetime(valid_times_unix_sec[0],unit='s')
+        split_file = dtime.strftime('/orudisk/hpc/ai2es/tornado/splits/SPLITS_%Y%m%d.nc')
         #random splits
-        ds = xr.open_dataset('/scratch/randychase/SPLITS_{}.nc'.format(current_split),engine='netcdf4')
+        ds = xr.open_dataset(split_file,engine='netcdf4')
         these_idx = ds['split_' + str(current_split)].values
     else:
         #serial splits
