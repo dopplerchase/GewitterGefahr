@@ -114,8 +114,7 @@ def _determine_splits(spc_date,input_directory_name,n_splits):
     ds = xr.merge(da_list)
 
     #save n_split many versions, because of permission issues 
-    for i in np.arange(0,n_splits):
-        ds.to_netcdf('/scratch/randychase/SPLITS_{}.nc'.format(i))
+    ds.to_netcdf(this_date.strftime("/ourdisk/hpc/ai2es/tornado/splits/SPLITS_%Y%m%d.nc"))
          
     return 
     
