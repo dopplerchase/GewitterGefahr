@@ -1554,7 +1554,7 @@ def extract_storm_images_gridrad(
     if random_split:
         #get the current date string 
         dtime = pd.to_datetime(valid_times_unix_sec[0],unit='s')
-        split_file = dtime.strftime('/orudisk/hpc/ai2es/tornado/splits/SPLITS_%Y%m%d.nc')
+        split_file = dtime.strftime('/ourdisk/hpc/ai2es/tornado/splits/SPLITS_%Y%m%d.nc')
         #random splits
         ds = xr.open_dataset(split_file,engine='netcdf4')
         these_idx = ds['split_' + str(current_split)].values
