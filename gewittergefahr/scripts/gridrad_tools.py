@@ -414,7 +414,13 @@ class gridrad:
 
         # Replace NaNs that were previously removed
         if (nnan > 0): ((data0['Z_H'])['values'])[inan] = float('nan')
-
+        
+        
+        #free up some RAM 
+        del ipos,inan,ifilter,echo_frequency
+        gc.collect()
+        
+        #this step dies with super big domains
         self.data_filt = copy.deepcopy(data0)
         
         #clear out some RAM 
@@ -608,11 +614,17 @@ class gridrad:
                 ((data0['Z_DR'])['values'])[ibad] = float('nan')
                 ((data0['K_DP'])['values'])[ibad] = float('nan')
                 ((data0['r_HV'])['values'])[ibad] = float('nan')
-
+        
+        #free up some RAM 
+        del zzz,ibad,cover,fin,k4km
+        gc.collect()
+        
         self.data_filt = copy.deepcopy(data0)
+        
         #del data0 to free up RAM 
         del data0
         gc.collect()
+        
         self.filter_flag = 2 
         
     def to_xarray(self, key_list_in = ['Z_H','Z_DR','K_DP','r_HV','AzShr','Div','SW'],
