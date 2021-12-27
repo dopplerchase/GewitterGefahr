@@ -32,6 +32,8 @@ from gewittergefahr.gg_utils import file_system_utils
 from gewittergefahr.gg_utils import error_checking
 from gewittergefahr.deep_learning import storm_images
 from gewittergefahr.deep_learning import deep_learning_utils as dl_utils
+#import garbage collector to free up RAM 
+import gc
 
 SEPARATOR_STRING = '\n\n' + '*' * 50 + '\n\n'
 
@@ -379,6 +381,10 @@ def _create_3d_examples(
             dl_utils.stack_radar_fields(tuple_of_3d_image_matrices),
         )
 
+    #on days with LOTS of storms, we need to free up some RAM (first try to do that)
+    del tuple_of_3d_image_matrices
+    gc.collect()
+    
     radar_field_names = [
         storm_images.image_file_name_to_field(f)
         for f in radar_file_name_matrix[:, 0]
