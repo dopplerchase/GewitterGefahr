@@ -373,7 +373,7 @@ def assert_is_numpy_array_without_nan(input_variable):
     #choosing just float requires alot of RAM sometimes. So lets try float32 and run gc 
     gc.collect()
     assert_is_real_numpy_array(input_variable)
-    if numpy.any(numpy.isnan(input_variable.astype(np.float32))):
+    if numpy.any(numpy.isnan(input_variable.astype(numpy.float32))):
         raise ValueError("Input array contains one or more NaN's.")
 
 
