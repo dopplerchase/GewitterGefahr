@@ -9,8 +9,7 @@ import os.path
 import numpy
 import pandas
 import gc 
-import warnings
-warnings.filterwarnings("ignore")
+
 
 
 # TODO(thunderhoser): Fix hack in `REAL_NUMBER_TYPES` (where I added a bunch of
