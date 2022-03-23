@@ -8,6 +8,10 @@ import numbers
 import os.path
 import numpy
 import pandas
+import gc 
+import warnings
+warnings.filterwarnings("ignore")
+
 
 # TODO(thunderhoser): Fix hack in `REAL_NUMBER_TYPES` (where I added a bunch of
 # numpy types).  There must be a better way to deal with all numpy float and int
@@ -368,9 +372,10 @@ def assert_is_numpy_array_without_nan(input_variable):
     :param input_variable: Input variable.
     :return: ValueError: if input array contains one or more NaN's.
     """
-
+    #choosing just float requires alot of RAM sometimes. So lets try float32 and run gc 
+    gc.collect()
     assert_is_real_numpy_array(input_variable)
-    if numpy.any(numpy.isnan(input_variable.astype(float))):
+    if numpy.any(numpy.isnan(input_variable.astype(numpy.float32))):
         raise ValueError("Input array contains one or more NaN's.")
 
 

@@ -1474,7 +1474,8 @@ def extract_storm_images_myrorss_or_mrms(
 
 def extract_storm_images_gridrad(
         storm_object_table, top_radar_dir_name, top_output_dir_name,
-        elevation_dir_name, num_storm_image_rows=DEFAULT_NUM_IMAGE_ROWS,
+        elevation_dir_name, spc_date_string,
+        num_storm_image_rows=DEFAULT_NUM_IMAGE_ROWS,
         num_storm_image_columns=DEFAULT_NUM_IMAGE_COLUMNS, rotate_grids=True,
         rotated_grid_spacing_metres=DEFAULT_ROTATED_GRID_SPACING_METRES,
         radar_field_names=DEFAULT_GRIDRAD_FIELD_NAMES,
@@ -1552,8 +1553,8 @@ def extract_storm_images_gridrad(
     #this is VERY slow to loop over all times with one lonely CPU. 
     #RJC implemented two split proccedures (11/11/21)
     if random_split:
-        #get the current date string 
-        dtime = pd.to_datetime(valid_times_unix_sec[0],unit='s')
+        #get the current date string
+        dtime = pd.to_datetime(spc_date_string)
         split_file = dtime.strftime('/ourdisk/hpc/ai2es/tornado/splits/SPLITS_%Y%m%d.nc')
         #random splits
         ds = xr.open_dataset(split_file,engine='netcdf4')
@@ -1568,196 +1569,204 @@ def extract_storm_images_gridrad(
         all_idx = numpy.arange(num_times+1,dtype=int)
         these_idx = all_idx[left_bounds[current_split]:right_bounds[current_split]]
 
-    print(these_idx.max(),len(radar_file_names),len(valid_times_unix_sec)) 
-    for i in tqdm.tqdm(these_idx):
-        this_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
-            radar_file_names[i]
-        )
-
-        latitude_spacing_deg, longitude_spacing_deg = _check_grid_spacing(
-            new_metadata_dict=this_metadata_dict,
-            orig_lat_spacing_deg=latitude_spacing_deg,
-            orig_lng_spacing_deg=longitude_spacing_deg)
-
-        these_storm_indices = _get_relevant_storm_objects(
-            storm_object_table=storm_object_table,
-            valid_time_unix_sec=valid_times_unix_sec[i],
-            valid_spc_date_string=valid_spc_date_strings[i])
-
-        this_storm_object_table = storm_object_table.iloc[these_storm_indices]
-
-        print('Finding storm elevations at {0:s}...'.format(
-            valid_time_strings[i]
-        ))
-
-        these_elevations_m_asl = geodetic_utils.get_elevations(
-            latitudes_deg=this_storm_object_table[
-                tracking_utils.CENTROID_LATITUDE_COLUMN].values,
-            longitudes_deg=this_storm_object_table[
-                tracking_utils.CENTROID_LONGITUDE_COLUMN].values,
-            working_dir_name=elevation_dir_name)
-
-        this_storm_object_table = this_storm_object_table.assign(**{
-            ELEVATION_COLUMN: these_elevations_m_asl
-        })
-
-        if rotate_grids:
-            print((
-                'Creating rotated {0:.1f}-metre grids for storms at '
-                '{1:s}...'
-            ).format(
-                rotated_grid_spacing_metres, valid_time_strings[i]
-            ))
-
-            this_storm_object_table = _rotate_grids_many_storm_objects(
-                storm_object_table=this_storm_object_table,
-                num_storm_image_rows=num_storm_image_rows,
-                num_storm_image_columns=num_storm_image_columns,
-                storm_grid_spacing_metres=rotated_grid_spacing_metres,
-                for_azimuthal_shear=False)
-
-        this_num_storms = len(this_storm_object_table.index)
-
-        for j in range(num_fields):
-            print('Reading "{0:s}" from file: "{1:s}"...'.format(
-                radar_field_names[j], radar_file_names[i]
-            ))
-
-            (this_full_radar_matrix_3d, these_full_heights_m_asl,
-             these_full_latitudes_deg, these_full_longitudes_deg
-            ) = gridrad_io.read_field_from_full_grid_file(
-                netcdf_file_name=radar_file_names[i],
-                field_name=radar_field_names[j],
-                metadata_dict=this_metadata_dict)
-
-            this_full_radar_matrix_3d[
-                numpy.isnan(this_full_radar_matrix_3d)
-            ] = PADDING_VALUE
-
-            if not rotate_grids:
-                this_full_radar_matrix_3d = numpy.flip(
-                    this_full_radar_matrix_3d, axis=1)
-                these_full_latitudes_deg = these_full_latitudes_deg[::-1]
-
-            this_storm_image_matrix_sea_relative = numpy.full(
-                (this_num_storms, num_storm_image_rows, num_storm_image_columns,
-                 num_heights_asl),
-                numpy.nan
+   
+    #depending on how many splits were chosen with the random split
+    #and the number of times with storms in that day, 
+    #then there might be some that are empty. 
+    n_good_idx = len(these_idx)
+    if n_good_idx > 0:
+        print(these_idx.max(),len(radar_file_names),len(valid_times_unix_sec)) 
+        for i in tqdm.tqdm(these_idx):
+            this_metadata_dict = gridrad_io.read_metadata_from_full_grid_file(
+                radar_file_names[i]
             )
 
-            for k in range(num_heights_asl):
-                this_height_index = numpy.where(
-                    these_full_heights_m_asl == radar_heights_m_asl[k]
-                )[0][0]
+            latitude_spacing_deg, longitude_spacing_deg = _check_grid_spacing(
+                new_metadata_dict=this_metadata_dict,
+                orig_lat_spacing_deg=latitude_spacing_deg,
+                orig_lng_spacing_deg=longitude_spacing_deg)
 
-                this_full_radar_matrix_2d = this_full_radar_matrix_3d[
-                    this_height_index, ...]
+            these_storm_indices = _get_relevant_storm_objects(
+                storm_object_table=storm_object_table,
+                valid_time_unix_sec=valid_times_unix_sec[i],
+                valid_spc_date_string=valid_spc_date_strings[i])
 
+            this_storm_object_table = storm_object_table.iloc[these_storm_indices]
+
+            print('Finding storm elevations at {0:s}...'.format(
+                valid_time_strings[i]
+            ))
+
+            these_elevations_m_asl = geodetic_utils.get_elevations(
+                latitudes_deg=this_storm_object_table[
+                    tracking_utils.CENTROID_LATITUDE_COLUMN].values,
+                longitudes_deg=this_storm_object_table[
+                    tracking_utils.CENTROID_LONGITUDE_COLUMN].values,
+                working_dir_name=elevation_dir_name)
+
+            this_storm_object_table = this_storm_object_table.assign(**{
+                ELEVATION_COLUMN: these_elevations_m_asl
+            })
+
+            if rotate_grids:
                 print((
-                    'Extracting storm-centered images for "{0:s}" at {1:d} '
-                    'metres ASL and {2:s}...'
+                    'Creating rotated {0:.1f}-metre grids for storms at '
+                    '{1:s}...'
                 ).format(
-                    radar_field_names[j],
-                    int(numpy.round(radar_heights_m_asl[k])),
-                    valid_time_strings[i]
+                    rotated_grid_spacing_metres, valid_time_strings[i]
                 ))
 
-                if rotate_grids:
-                    for m in range(this_num_storms):
-                        this_storm_image_matrix_sea_relative[
-                            m, ..., k
-                        ] = _extract_rotated_storm_image(
-                            full_radar_matrix=this_full_radar_matrix_2d,
-                            full_grid_point_latitudes_deg=
-                            these_full_latitudes_deg,
-                            full_grid_point_longitudes_deg=
-                            these_full_longitudes_deg,
-                            rotated_gp_lat_matrix_deg=this_storm_object_table[
-                                ROTATED_NON_SHEAR_LATITUDES_COLUMN].values[m],
-                            rotated_gp_lng_matrix_deg=this_storm_object_table[
-                                ROTATED_NON_SHEAR_LONGITUDES_COLUMN].values[m]
-                        )
-                else:
-                    these_center_rows, these_center_columns = (
-                        _centroids_latlng_to_rowcol(
-                            centroid_latitudes_deg=this_storm_object_table[
-                                tracking_utils.CENTROID_LATITUDE_COLUMN].values,
-                            centroid_longitudes_deg=this_storm_object_table[
-                                tracking_utils.CENTROID_LONGITUDE_COLUMN
-                            ].values,
-                            nw_grid_point_lat_deg=this_metadata_dict[
-                                radar_utils.NW_GRID_POINT_LAT_COLUMN],
-                            nw_grid_point_lng_deg=this_metadata_dict[
-                                radar_utils.NW_GRID_POINT_LNG_COLUMN],
-                            lat_spacing_deg=this_metadata_dict[
-                                radar_utils.LAT_SPACING_COLUMN],
-                            lng_spacing_deg=this_metadata_dict[
-                                radar_utils.LNG_SPACING_COLUMN]
-                        )
-                    )
+                this_storm_object_table = _rotate_grids_many_storm_objects(
+                    storm_object_table=this_storm_object_table,
+                    num_storm_image_rows=num_storm_image_rows,
+                    num_storm_image_columns=num_storm_image_columns,
+                    storm_grid_spacing_metres=rotated_grid_spacing_metres,
+                    for_azimuthal_shear=False)
 
-                    for m in range(this_num_storms):
-                        this_storm_image_matrix_sea_relative[m, ..., k] = (
-                            _extract_unrotated_storm_image(
+            this_num_storms = len(this_storm_object_table.index)
+
+            for j in range(num_fields):
+                print('Reading "{0:s}" from file: "{1:s}"...'.format(
+                    radar_field_names[j], radar_file_names[i]
+                ))
+
+                (this_full_radar_matrix_3d, these_full_heights_m_asl,
+                these_full_latitudes_deg, these_full_longitudes_deg
+                ) = gridrad_io.read_field_from_full_grid_file(
+                    netcdf_file_name=radar_file_names[i],
+                    field_name=radar_field_names[j],
+                    metadata_dict=this_metadata_dict)
+
+                this_full_radar_matrix_3d[
+                    numpy.isnan(this_full_radar_matrix_3d)
+                ] = PADDING_VALUE
+
+                if not rotate_grids:
+                    this_full_radar_matrix_3d = numpy.flip(
+                        this_full_radar_matrix_3d, axis=1)
+                    these_full_latitudes_deg = these_full_latitudes_deg[::-1]
+
+                this_storm_image_matrix_sea_relative = numpy.full(
+                    (this_num_storms, num_storm_image_rows, num_storm_image_columns,
+                    num_heights_asl),
+                    numpy.nan
+                )
+
+                for k in range(num_heights_asl):
+                    this_height_index = numpy.where(
+                        these_full_heights_m_asl == radar_heights_m_asl[k]
+                    )[0][0]
+
+                    this_full_radar_matrix_2d = this_full_radar_matrix_3d[
+                        this_height_index, ...]
+
+                    print((
+                        'Extracting storm-centered images for "{0:s}" at {1:d} '
+                        'metres ASL and {2:s}...'
+                    ).format(
+                        radar_field_names[j],
+                        int(numpy.round(radar_heights_m_asl[k])),
+                        valid_time_strings[i]
+                    ))
+
+                    if rotate_grids:
+                        for m in range(this_num_storms):
+                            this_storm_image_matrix_sea_relative[
+                                m, ..., k
+                            ] = _extract_rotated_storm_image(
                                 full_radar_matrix=this_full_radar_matrix_2d,
-                                center_row=these_center_rows[m],
-                                center_column=these_center_columns[m],
-                                num_storm_image_rows=num_storm_image_rows,
-                                num_storm_image_columns=num_storm_image_columns)
+                                full_grid_point_latitudes_deg=
+                                these_full_latitudes_deg,
+                                full_grid_point_longitudes_deg=
+                                these_full_longitudes_deg,
+                                rotated_gp_lat_matrix_deg=this_storm_object_table[
+                                    ROTATED_NON_SHEAR_LATITUDES_COLUMN].values[m],
+                                rotated_gp_lng_matrix_deg=this_storm_object_table[
+                                    ROTATED_NON_SHEAR_LONGITUDES_COLUMN].values[m]
+                            )
+                    else:
+                        these_center_rows, these_center_columns = (
+                            _centroids_latlng_to_rowcol(
+                                centroid_latitudes_deg=this_storm_object_table[
+                                    tracking_utils.CENTROID_LATITUDE_COLUMN].values,
+                                centroid_longitudes_deg=this_storm_object_table[
+                                    tracking_utils.CENTROID_LONGITUDE_COLUMN
+                                ].values,
+                                nw_grid_point_lat_deg=this_metadata_dict[
+                                    radar_utils.NW_GRID_POINT_LAT_COLUMN],
+                                nw_grid_point_lng_deg=this_metadata_dict[
+                                    radar_utils.NW_GRID_POINT_LNG_COLUMN],
+                                lat_spacing_deg=this_metadata_dict[
+                                    radar_utils.LAT_SPACING_COLUMN],
+                                lng_spacing_deg=this_metadata_dict[
+                                    radar_utils.LNG_SPACING_COLUMN]
+                            )
                         )
 
-            print((
-                'Interpolating "{0:s}" to desired heights above ground level...'
-            ).format(radar_field_names[j]))
-
-            this_storm_image_matrix_ground_relative = numpy.full(
-                (this_num_storms, num_storm_image_rows, num_storm_image_columns,
-                 num_heights_agl),
-                numpy.nan
-            )
-
-            for m in range(this_num_storms):
-                these_heights_m_asl = (
-                    this_storm_object_table[ELEVATION_COLUMN].values[m]
-                    + radar_heights_m_agl
-                )
-
-                this_storm_image_matrix_ground_relative[m, ...] = (
-                    _interp_storm_image_in_height(
-                        storm_image_matrix_3d=
-                        this_storm_image_matrix_sea_relative[m, ...],
-                        orig_heights_m_asl=radar_heights_m_asl,
-                        new_heights_m_asl=these_heights_m_asl)
-                )
-
-            for k in range(num_heights_agl):
-                this_image_file_name = find_storm_image_file(
-                    top_directory_name=top_output_dir_name,
-                    unix_time_sec=valid_times_unix_sec[i],
-                    spc_date_string=valid_spc_date_strings[i],
-                    radar_source=radar_utils.GRIDRAD_SOURCE_ID,
-                    radar_field_name=radar_field_names[j],
-                    radar_height_m_agl=radar_heights_m_agl[k],
-                    raise_error_if_missing=False)
+                        for m in range(this_num_storms):
+                            this_storm_image_matrix_sea_relative[m, ..., k] = (
+                                _extract_unrotated_storm_image(
+                                    full_radar_matrix=this_full_radar_matrix_2d,
+                                    center_row=these_center_rows[m],
+                                    center_column=these_center_columns[m],
+                                    num_storm_image_rows=num_storm_image_rows,
+                                    num_storm_image_columns=num_storm_image_columns)
+                            )
 
                 print((
-                    'Writing storm-centered images to: "{0:s}"...'
-                ).format(this_image_file_name))
+                    'Interpolating "{0:s}" to desired heights above ground level...'
+                ).format(radar_field_names[j]))
 
-                write_storm_images(
-                    netcdf_file_name=this_image_file_name,
-                    storm_image_matrix=this_storm_image_matrix_ground_relative[
-                        ..., k],
-                    full_id_strings=this_storm_object_table[
-                        tracking_utils.FULL_ID_COLUMN].values.tolist(),
-                    valid_times_unix_sec=this_storm_object_table[
-                        tracking_utils.VALID_TIME_COLUMN].values.astype(int),
-                    radar_field_name=radar_field_names[j],
-                    radar_height_m_agl=radar_heights_m_agl[k],
-                    rotated_grids=rotate_grids,
-                    rotated_grid_spacing_metres=rotated_grid_spacing_metres)
+                this_storm_image_matrix_ground_relative = numpy.full(
+                    (this_num_storms, num_storm_image_rows, num_storm_image_columns,
+                    num_heights_agl),
+                    numpy.nan
+                )
 
-            print('\n')
+                for m in range(this_num_storms):
+                    these_heights_m_asl = (
+                        this_storm_object_table[ELEVATION_COLUMN].values[m]
+                        + radar_heights_m_agl
+                    )
+
+                    this_storm_image_matrix_ground_relative[m, ...] = (
+                        _interp_storm_image_in_height(
+                            storm_image_matrix_3d=
+                            this_storm_image_matrix_sea_relative[m, ...],
+                            orig_heights_m_asl=radar_heights_m_asl,
+                            new_heights_m_asl=these_heights_m_asl)
+                    )
+
+                for k in range(num_heights_agl):
+                    this_image_file_name = find_storm_image_file(
+                        top_directory_name=top_output_dir_name,
+                        unix_time_sec=valid_times_unix_sec[i],
+                        spc_date_string=valid_spc_date_strings[i],
+                        radar_source=radar_utils.GRIDRAD_SOURCE_ID,
+                        radar_field_name=radar_field_names[j],
+                        radar_height_m_agl=radar_heights_m_agl[k],
+                        raise_error_if_missing=False)
+
+                    print((
+                        'Writing storm-centered images to: "{0:s}"...'
+                    ).format(this_image_file_name))
+
+                    write_storm_images(
+                        netcdf_file_name=this_image_file_name,
+                        storm_image_matrix=this_storm_image_matrix_ground_relative[
+                            ..., k],
+                        full_id_strings=this_storm_object_table[
+                            tracking_utils.FULL_ID_COLUMN].values.tolist(),
+                        valid_times_unix_sec=this_storm_object_table[
+                            tracking_utils.VALID_TIME_COLUMN].values.astype(int),
+                        radar_field_name=radar_field_names[j],
+                        radar_height_m_agl=radar_heights_m_agl[k],
+                        rotated_grids=rotate_grids,
+                        rotated_grid_spacing_metres=rotated_grid_spacing_metres)
+
+                print('\n')
+    else:
+        print('no idx in split file, likely due to number of splits + number of times to process... exiting without error')
 
 
 def write_storm_images(

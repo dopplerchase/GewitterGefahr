@@ -74,26 +74,64 @@ def _determine_splits(spc_date,input_directory_name,n_splits):
     #reset index 
     indices = np.arange(0,len(keep_indices))
     indices = indices.tolist()
-
     #keep a counter of how many times to iterate
     total_n_times = len(indices)
 
-    #loop randomly to fill worker tasks
-    split_dict = {}
-    time_dict = {}
-    total_it = 0
+    #get the order from largest to smallest
+    idx_order = np.argsort(ratio)[::-1]
+
+    if len(indices) < n_splits:
+        print('too many splits, some may be empty...')
+    
+    #fill split_dict
+    split_dict = {} 
     for n in np.arange(0,n_splits):
-        in_thresh = 0
-        in_list = []
-        while (in_thresh <= thresh):
-            if (total_it > total_n_times) or (len(indices)==0):
-                break
-            idx = np.random.choice(indices,replace=False,size=1)
-            in_list.append(idx[0])
-            in_thresh += ratio[idx]
-            indices.remove(idx[0])
-            total_it += 1
-        split_dict[n] = np.asarray(in_list,dtype=np.int)
+        split_dict[n] = []
+    
+    #snake fill (0,1,2...n,n,n-1,n-2...0,0,1,2...)
+    count_up = True
+    it = -1
+    for t,i in enumerate(idx_order):
+        #iterate counter 
+        if count_up:
+            it +=1
+        else:
+            it -=1 
+
+        #check to see if we need to snake up or down
+        if it == n_splits:
+            it -= 1
+            count_up=False
+        elif (it==-1) and (t!=0):
+            it +=1
+            count_up=True
+        
+        #fill the split_list with the idx 
+        split_dict[it].append(indices[i])
+
+
+
+    #convert the lists to arrays
+    for n in np.arange(0,n_splits):
+        split_dict[n] = np.asarray(split_dict[n],dtype=np.int)
+    
+    # #loop randomly to fill worker tasks
+    # split_dict = {}
+    # time_dict = {}
+    # total_it = 0
+    # print(len(indices))
+    # for n in np.arange(0,n_splits):
+    #     in_thresh = 0
+    #     in_list = []
+    #     while (in_thresh <= thresh):
+    #         if (total_it > total_n_times) or (len(indices)==0) or (len(in_list) > (len(indices)/n_splits)):
+    #             break
+    #         idx = np.random.choice(indices,replace=False,size=1)
+    #         in_list.append(idx[0])
+    #         in_thresh += ratio[idx]
+    #         indices.remove(idx[0])
+    #         total_it += 1
+    #     split_dict[n] = np.asarray(in_list,dtype=np.int)
 
 
     #throw the data into an xarray dataset
@@ -112,6 +150,10 @@ def _determine_splits(spc_date,input_directory_name,n_splits):
 
     #merge and save
     ds = xr.merge(da_list)
+
+    #add metadata var 
+    ds['total_files'] = xr.DataArray([len(indices)],dims=['s'])
+    ds['n_splits'] = xr.DataArray([n_splits],dims=['s'])
 
     #save n_split many versions, because of permission issues 
     ds.to_netcdf(this_date.strftime("/ourdisk/hpc/ai2es/tornado/splits/SPLITS_%Y%m%d.nc"))

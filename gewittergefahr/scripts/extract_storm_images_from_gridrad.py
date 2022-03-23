@@ -285,7 +285,8 @@ def _extract_storm_images(
         new_version=new_gridrad_version,
         n_splits=n_splits,
         current_split=current_split,
-        random_split=random_split)
+        random_split=random_split,
+        spc_date_string=spc_date_string)
 
 
 if __name__ == '__main__':

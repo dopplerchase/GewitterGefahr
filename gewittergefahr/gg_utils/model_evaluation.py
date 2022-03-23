@@ -1265,7 +1265,7 @@ def get_no_resolution_line_for_reliability_curve(mean_observed_label):
 
 def run_evaluation(
         forecast_probabilities, observed_labels, best_prob_threshold,
-        all_prob_thresholds, climatology):
+        all_prob_thresholds, climatology,verbose=False):
     """Runs full evaluation (for binary-classification problem).
 
     The input args `forecast_probabilities` and `observed_labels` may contain
@@ -1341,8 +1341,8 @@ def run_evaluation(
         PEIRCE_SCORE_KEY: get_peirce_score(contingency_table_as_dict),
         HEIDKE_SCORE_KEY: get_heidke_score(contingency_table_as_dict)
     })
-
-    print('\n{0:s}\n'.format(str(evaluation_dict)))
+    if verbose:
+        print('\n{0:s}\n'.format(str(evaluation_dict)))
 
     for this_key in evaluation_dict:
         if isinstance(evaluation_dict[this_key], numpy.ndarray):
