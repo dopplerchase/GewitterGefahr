@@ -733,7 +733,7 @@ class gridrad_new:
         """ 
         Load the sparse GridRad file. Sparse means only the observed data points are saved. So data are in 1d-vector
         """
-        ds = xr.open_dataset(filename)
+        ds = xr.open_dataset(self.filename)
         ds = ds.load()
         ds = ds.rename({'index':'idx'})
         ds = ds.assign_coords({'idx':ds.idx})
