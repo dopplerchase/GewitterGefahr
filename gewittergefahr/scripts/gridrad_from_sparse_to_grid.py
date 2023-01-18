@@ -6,7 +6,7 @@ from tqdm import tqdm
 import glob
 import gc
 import os 
-from gridrad_tools import gridrad 
+from gridrad_tools import gridrad_new 
 
 IN_DIR_INPUT_ARG = 'input_directory_name'
 OUT_DIR_INPUT_ARG = 'output_directory_name'
@@ -47,7 +47,7 @@ def _sparse2grid(input_directory_name, output_directory_name,check_exist=False):
                 continue
          else:
              #the gridrad object will open the raw sparse netcdf
-             gr = gridrad(filename=filename,filter=True,toxr=True)
+             gr = gridrad_new(filename=filename,filter=True,toxr=True,timer=True)
 
              #save the gridded product 
              gr.ds.to_netcdf(savename,mode='w')
