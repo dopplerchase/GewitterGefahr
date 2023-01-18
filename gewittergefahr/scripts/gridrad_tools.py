@@ -1,6 +1,7 @@
 import time 
 import gc 
 import numpy as np 
+import xarray as xr
 
 class gridrad:
     """
