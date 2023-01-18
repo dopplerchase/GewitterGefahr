@@ -1,5 +1,6 @@
 import time 
 import gc 
+import numpy as np 
 
 class gridrad:
     """
