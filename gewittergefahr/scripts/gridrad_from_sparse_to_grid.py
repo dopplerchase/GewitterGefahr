@@ -50,8 +50,10 @@ def _sparse2grid(input_directory_name, output_directory_name,check_exist=False):
              gr = gridrad_new(filename=filename,filter=True,toxr=True,timer=True)
 
              #save the gridded product 
-             gr.ds.to_netcdf(savename,mode='w')
+             gr.ds_out.to_netcdf(savename,mode='w')
              gr.ds.close()
+             gr.ds_out.close()
+            
              del gr 
              gc.collect()
          
